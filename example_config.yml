@@ -1,0 +1,8 @@
+db:
+  host: subdomain.domain.com
+  database: database_name
+  user: username
+  password: password
+path:
+  mac: /path/to/music/
+  pc: C:\different\path\to\music

@@ -1,0 +1,23 @@
+body {
+  font: 10px sans-serif;
+  shape-rendering: crispEdges;
+}
+
+.day {
+  fill: #fff;
+  stroke: #ccc;
+}
+
+.month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
+
+.running { fill: green; }
+.erging { fill: orange; }
+.lifting { fill: yellow; }
+.crossfit { fill: purple; }
+.sculling { fill: aqua; }
+.swimming { fill: blue; }
+.other { fill: #eeeeee; }
