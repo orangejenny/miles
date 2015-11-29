@@ -2,10 +2,26 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="style/miles.css"></link>
 		<link rel="stylesheet" type="text/css" href="style/calendar.css"></link>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 		<script src="script/calendar.js"></script>
+		<script src="script/miles.js"></script>
 	</head>
 	<body>
         <div id="calendar"></div>
+        <ul id="list"></ul>
+
+        <script type="text/template" name="day">
+            <li>
+                <%= DAY %><% if (NOTES) { %>: <%= NOTES %><% } %>
+                <% if (WORKOUTS) { %>
+                    <ul>
+                        <% _.each(WORKOUTS, function(w) { %>
+                            <li><%= w.DESCRIPTION %></li>
+                        <% }) %>
+                    </ul>
+                <% } %>
+            </li>
+        </script>
 	</body>
 </html>

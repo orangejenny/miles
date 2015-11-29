@@ -1,9 +1,10 @@
 // Adapted from http://bl.ocks.org/mbostock/4063318
-var width = 960,
-    height = 136,
-    cellSize = 17;
+    var width = 960,
+        height = 136,
+        cellSize = 17;
 
-document.addEventListener('DOMContentLoaded', function() {
+function generateCalendar(json) {
+
     var minYear = 2011,
         maxYear = 2016;
     
@@ -37,10 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .attr("class", "month")
         .attr("d", monthPath);
     
-    d3.json("data.pl", function(error, json) {
-        if (error) {
-            throw error;
-        }
         var data = d3.nest()
                      .key(function(d) { return d.DAY; })
                      .rollup(function(d) { return d[0].WORKOUTS[0] || {}; })
@@ -50,8 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr("class", function(d) { return "day " + activityClass(data[d].ACTIVITY); })
             .select("title")
             .text(function(d) { return d + ": " + data[d].ACTIVITY; });
-    });
-});
+}
 
 function activityClass(activity) {
     if (activity === "running" || activity === "erging" || activity === "crossfit"

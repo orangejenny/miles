@@ -14,8 +14,8 @@ my $dbh = Miles::DBH();
 print $cgi->header(-type => 'text/text');
 
 my @workouts = Miles::Results($dbh, {
-    SQL => "select id, day_id, activity from workouts",
-    COLUMNS => [qw(id dayid activity)],
+    SQL => "select id, day_id, activity, time, distance, sets, reps, weight, unit from workouts",
+    COLUMNS => [qw(id dayid activity time distance sets reps weight unit)],
 });
 
 my %workoutsbydayid = map { $_->{DAYID} => [] } @workouts;

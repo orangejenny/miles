@@ -1,23 +1,23 @@
 body {
-  font: 10px sans-serif;
+  font: sans-serif;
   shape-rendering: crispEdges;
 }
 
-.day {
+#calendar .day {
   fill: #fff;
   stroke: #ccc;
 }
 
-.month {
+#calendar .month {
   fill: none;
   stroke: #000;
   stroke-width: 2px;
 }
 
-.running { fill: green; }
-.erging { fill: orange; }
-.lifting { fill: yellow; }
-.crossfit { fill: purple; }
-.sculling { fill: aqua; }
-.swimming { fill: blue; }
-.other { fill: #eeeeee; }
+#calendar .running { fill: green; }
+#calendar .erging { fill: orange; }
+#calendar .lifting { fill: yellow; }
+#calendar .crossfit { fill: purple; }
+#calendar .sculling { fill: aqua; }
+#calendar .swimming { fill: blue; }
+#calendar .other { fill: #eeeeee; }
