@@ -51,6 +51,7 @@ print qq{
     		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     		<script src="script/calendar.js"></script>
     		<script src="script/miles.js"></script>
+            <title>Miles</title>
     	</head>
     	<body>
             <div id="calendar"></div>
