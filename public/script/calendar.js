@@ -5,8 +5,8 @@
 
 function generateCalendar(json) {
 
-    var minYear = 2011,
-        maxYear = 2016;
+    var minYear = 2015,
+        maxYear = 2017;
     
     var format = d3.time.format("%Y-%m-%d");
     

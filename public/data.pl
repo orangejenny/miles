@@ -6,7 +6,6 @@ use strict;
 use Miles;
 use CGI;
 use JSON;
-use Data::Dumper;
 
 my $cgi = CGI->new;
 my $dbh = Miles::DBH();

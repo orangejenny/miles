@@ -35,8 +35,16 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             return day;
         });
-        generateCalendar(json);
         generateList(json);
+        generateCalendar(json);
+    });
+
+    var workoutTemplate = document.querySelector("script[type='text/template'][name='blank-workout']");
+    workoutTemplate = _.template(workoutTemplate.innerHTML);
+    var workoutIndex = 0;
+    document.getElementById("add-workout").addEventListener("click", function() {
+        document.querySelector("#new-day .workouts").innerHTML += workoutTemplate({ index: workoutIndex });
+        workoutIndex++;
     });
 });
 
