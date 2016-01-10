@@ -40,25 +40,39 @@ document.addEventListener('DOMContentLoaded', function() {
         generateCalendar(json);
     });
 
-    var workoutIndex = 1;
-    addBlankWorkout(0);
-    document.getElementById("add-workout").addEventListener("click", function() {
-        addBlankWorkout(workoutIndex);
-        workoutIndex++;
-    });
+    document.getElementById("add-workout").addEventListener("click", addBlankWorkout);
 
     updateDayOfWeek();
     _.each(document.querySelectorAll("#new-day legend input"), function(i) {
         i.addEventListener("blur", updateDayOfWeek);
     });
 
-    document.querySelector(".add-day button").addEventListener("click", function() {
-        document.querySelector(".add-day").style.display = "none";
-        document.querySelector(".not-legend").style.display = "block";
+    _.each(document.querySelectorAll(".add-day button"), function(button) {
+        button.addEventListener("click", function() {
+            var workouts = button.getAttribute("data-workouts");
+            if (workouts) {
+                workouts = JSON.parse(workouts);
+                _.each(workouts, function(workout, index) {
+                    var workoutDiv = addBlankWorkout();
+                    _.each(['activity', 'unit', 'sets', 'reps', 'weight', 'distance', 'time'], function(name) {
+                        if (workout[name.toUpperCase()]) {
+                            workoutDiv.querySelector("[name^='" + name + "']").value = workout[name.toUpperCase()] || "";
+                        }
+                    });
+                    updatePace(workoutDiv.querySelector("input[name^='time']"));
+                });
+            } else {
+                addBlankWorkout();
+            }
+            document.querySelector(".add-day").style.display = "none";
+            document.querySelector(".not-legend").style.display = "block";
+        });
     });
+
     document.querySelector("#cancel").addEventListener("click", function() {
         document.querySelector(".add-day").style.display = "block";
         document.querySelector(".not-legend").style.display = "none";
+        document.querySelector("#new-day .workouts").innerHTML = "";
     });
 });
 
@@ -102,15 +116,24 @@ function updateDayOfWeek() {
     document.getElementById("day-of-week").innerHTML = day;
 }
 
-function addBlankWorkout(index) {
+function addBlankWorkout() {
+    var index = document.querySelectorAll("#new-day .workouts .workout-row").length;
     var workoutTemplate = document.querySelector("script[type='text/template'][name='blank-workout']");
     workoutTemplate = _.template(workoutTemplate.innerHTML);
-    document.querySelector("#new-day .workouts").innerHTML += workoutTemplate({ index: index });
-    _.each(document.querySelectorAll("#new-day .workout-row:last-child input"), function(i) {
+    var div = document.createElement("div");
+    div.innerHTML = workoutTemplate({ index: index });
+    // TODO: deal with this. note that this will not add any text nodes
+    _.each(div.children, function(child) {
+        document.querySelector("#new-day .workouts").appendChild(child);
+    });
+
+    var div = document.querySelector("#new-day .workout-row:last-child");
+    _.each(div.querySelectorAll("input"), function(i) {
         i.addEventListener("blur", function() {
             updatePace(this);
         });
     });
+    return div;
 }
 
 function generateList(days) {

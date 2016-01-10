@@ -155,6 +155,21 @@ sub DBH {
 }
 
 ################################################################
+# EscapeHTMLAttribute
+#
+# Description: Escape a given string for use as an HTML attribute
+#
+# Params: string
+#
+# Return Value: string
+################################################################
+sub EscapeHTMLAttribute {
+	my $string = shift;
+	$string =~ s/"/&quot;/g;
+	return $string;
+}
+
+################################################################
 # Fdat
 #
 # Description: Builds hashref of GET/POST params

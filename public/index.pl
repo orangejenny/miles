@@ -4,8 +4,8 @@ use lib "..";
 use strict;
 
 use CGI;
+use JSON qw(to_json);
 use Miles;
-use Data::Dumper;
 
 my $dbh = Miles::DBH();
 my $fdat = Miles::Fdat();
@@ -44,11 +44,46 @@ if ($error) {
     $error = "<div id='error'>$error</div>";
 }
 
+# Current date
 my @time = localtime;
 my ($sec, $min, $hour, $day, $month, $year, $wday, $yday, $isdst) = localtime;
 $day = $fdat->{DAY} || $day;
 $month = $fdat->{MONTH} || $month + 1;
 $year = $fdat->{YEAR} || $year + 1900;
+
+# Workout templates
+# TODO: move to javascript for the sake of being able to pull weights as well
+my $new6k = Miles::EscapeHTMLAttribute(to_json([{
+    ACTIVITY => 'erging',
+    DISTANCE => 6,
+    UNIT => 'km',
+}]));
+my $newbench = Miles::EscapeHTMLAttribute(to_json([{
+    ACTIVITY => 'squats',
+    SETS => 3,
+    REPS => 5,
+}, {
+    ACTIVITY => 'bench press',
+    SETS => 3,
+    REPS => 5,
+}, {
+    ACTIVITY => 'cleans',
+    SETS => 3,
+    REPS => 5,
+}]));
+my $newdeadlifts = Miles::EscapeHTMLAttribute(to_json([{
+    ACTIVITY => 'squats',
+    SETS => 3,
+    REPS => 5,
+}, {
+    ACTIVITY => 'overhead press',
+    SETS => 3,
+    REPS => 5,
+}, {
+    ACTIVITY => 'deadlifts',
+    SETS => 3,
+    REPS => 5,
+}]));
 
 print qq{
     <html>
@@ -83,6 +118,9 @@ print qq{
                     </div>
                     <div class="add-day">
                         <button type="button">Blank Day</button>
+                        <button type="button" data-workouts="$new6k">Erging 6k</button>
+                        <button type="button" data-workouts="$newbench">Squats + Bench + Cleans</button>
+                        <button type="button" data-workouts="$newdeadlifts">Squats + OHP + Deadlifts</button>
                     </div>
                 </fieldset>
             </form>
