@@ -18,12 +18,22 @@ sub Config {
 #   NOTES: string
 #   WORKOUTS: arrayref of hashrefs
 #
-# Return Value: None
+# Return Value: Error message, or blank string if successful.
 ################################################################
 sub AddDay {
     my ($dbh, $args) = @_;
+    my $error = "";
 
-    # TODO: transaction
+    # TODO: transaction for all of this
+    my @existing = Miles::Results($dbh, {
+        SQL => "select id from days where day = ?",
+        BINDS => [$args->{DAY}],
+        COLUMNS => ['id'],
+    });
+    if (scalar(@existing)) {
+        $error = sprintf("Duplicate entry; there is already an entry for %s.", $args->{DAY});
+    }
+
     my $sql = qq{
         insert into days (day, notes, created_at, updated_at, user)
         values (?, ?, now(), now(), 'jenny')
@@ -58,6 +68,8 @@ sub AddDay {
             SKIPFETCH => 1,
         });
     }
+
+    return $error;
 }
 
 ################################################################

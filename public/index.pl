@@ -13,6 +13,7 @@ my $fdat = Miles::Fdat();
 my $cgi = CGI->new;
 print $cgi->header();
 
+my $error = "";
 if ($fdat->{NEW} == 1) {
     my $day = sprintf("%s-%s-%s", $fdat->{YEAR}, $fdat->{MONTH}, $fdat->{DAY});
     my @workouts = ();
@@ -32,14 +33,15 @@ if ($fdat->{NEW} == 1) {
         }
         push(@workouts, $workout);
     }
-    Miles::AddDay($dbh, {
+    $error = Miles::AddDay($dbh, {
         DAY => $day,
         NOTES => $fdat->{NOTES},
         WORKOUTS => \@workouts,
     });
+}
 
-    # Prevent resubmission on refresh
-    print $cgi->redirect("index.pl");
+if ($error) {
+    $error = "<div id='error'>$error</div>";
 }
 
 my @time = localtime;
@@ -60,6 +62,7 @@ print qq{
             <title>Miles</title>
     	</head>
     	<body>
+            $error
             <form id="new-day" method="POST">
                 <fieldset>
                     <legend>
