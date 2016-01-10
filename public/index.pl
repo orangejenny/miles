@@ -82,14 +82,19 @@ print qq{
     
             <script type="text/template" name="day">
                 <li>
-                    <%= DAY %><% if (NOTES) { %>: <%= NOTES %><% } %>
+                    <div class="day">
+                        <%= DAY %>
+                    </div>
                     <% if (WORKOUTS) { %>
-                        <ul>
+                        <ul class="workouts">
                             <% _.each(WORKOUTS, function(w) { %>
                                 <li><%= w.DESCRIPTION %></li>
                             <% }) %>
                         </ul>
                     <% } %>
+                    <div class="notes">
+                        <%= NOTES %>
+                    </div>
                 </li>
             </script>
     
@@ -97,6 +102,7 @@ print qq{
                 <div class="row">
                     <div class="pull-left">
                         <select name="activity<%= index %>">
+                            <!-- TODO: pull from data -->
                             <option>running</option>
                             <option>erging</option>
                             <option>crossfit</option>

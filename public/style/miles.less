@@ -35,6 +35,12 @@ button {
     }
 }
 
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
 .pull-left {
     float: left;
 }
@@ -86,5 +92,26 @@ button {
 }
 
 #day-list {
+    width: 90%;
+    margin: 0 5%;
 
+    li {
+        @dayWidth: 150px;
+        .clearfix();
+
+        .day {
+            float: left;
+            width: @dayWidth;
+        }
+
+        .workouts {
+            float: left;
+            width: calc(~'50% - @{dayWidth}');
+        }
+
+        .notes {
+            float: left;
+            width: 50%;
+        }
+    }
 }
