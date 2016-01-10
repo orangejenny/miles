@@ -24,7 +24,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (w.TIME) {
                     text += " " + timeToString(w.TIME);
                     if (mightHavePace(w) && w.DISTANCE) {
-                        text += " (" + "???" + ")";
+                        var pace = w.TIME / w.DISTANCE;
+                        if (w.ACTIVITY === "erging") {
+                            if (w.UNIT === "km") {
+                                pace = pace / 2;
+                            }
+                        }
+                        text += " (" + timeToString(pace) + ")";
                     }
                 }
                 if (w.WEIGHT) {
@@ -83,6 +89,6 @@ function timeToString(time) {
     if (seconds < 10) {
         text += "0" 
     }
-    text += seconds
+    text += Math.round(seconds * 10) / 10;  // at most one decimal
     return text;
 }
