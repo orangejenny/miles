@@ -71,7 +71,7 @@ print qq{
                     <input type="hidden" name="new" value="1" />
                     <button type="button" id="add-workout" class="pull-right">Add another workout</button>
                     <div class="workouts"></div>
-                    <div class="row">
+                    <div class="input-row">
                         <textarea name="notes" placeholder="How was today?"></textarea>
                     </div>
                     <button type="submit" class="primary">Save</button>
@@ -99,9 +99,9 @@ print qq{
             </script>
     
             <script type="text/template" name="blank-workout">
-                <div class="row">
+                <div class="workout-row">
                     <div class="pull-left">
-                        <select id="new-activity" name="activity<%= index %>">
+                        <select class="new-activity" name="activity<%= index %>">
                             <!-- TODO: pull from data -->
                             <option>running</option>
                             <option>erging</option>
@@ -114,12 +114,12 @@ print qq{
                         </select>
                     </div>
                     <div class="pull-left">
-                        <div class="row">
+                        <div class="input-row">
                             <input type="text" name="sets<%= index %>" placeholder="sets" />
                             <input type="text" name="reps<%= index %>" placeholder="reps" />
                             <input type="text" name="weight<%= index %>" placeholder="weight" />
                         </div>
-                        <div class="row">
+                        <div class="input-row">
                             <input type="text" name="distance<%= index %>" placeholder="distance" />
                             <select name="unit<%= index %>">
                                 <option>mi</option>
@@ -127,6 +127,7 @@ print qq{
                                 <option>m</option>
                             </select>
                             <input type="text" name="time<%= index %>" placeholder="time" />
+                            <span class="pace"></span>
                         </div>
                     </div>
                 </div>

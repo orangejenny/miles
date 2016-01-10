@@ -23,14 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 if (w.TIME) {
                     text += " " + timeToString(w.TIME);
-                    if (mightHavePace(w) && w.DISTANCE) {
-                        var pace = w.TIME / w.DISTANCE;
-                        if (w.ACTIVITY === "erging") {
-                            if (w.UNIT === "km") {
-                                pace = pace / 2;
-                            }
-                        }
-                        text += " (" + timeToString(pace) + ")";
+                    var pace = getPace(w);
+                    if (pace) {
+                        text += " (" + pace + ")";
                     }
                 }
                 if (w.WEIGHT) {
@@ -58,6 +53,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function getPace(workout) {
+    if (workout.TIME && workout.DISTANCE) {
+        var pace = workout.TIME / workout.DISTANCE;
+        if (workout.ACTIVITY === "erging") {
+            if (workout.UNIT === "km") {
+                pace = pace / 2;
+            }
+        }
+        return timeToString(pace);
+    }
+    return "";
+}
+
+function updatePace(input) {
+    var parent = input;
+    while (parent !== document && !parent.classList.contains("workout-row")) {
+        parent = parent.parentElement;
+    }
+    parent.querySelector(".pace").innerHTML = getPace({
+        ACTIVITY: parent.querySelector("select[name^='activity'] option:checked").value,
+        TIME: stringToTime(parent.querySelector("input[name^='time']").value),
+        DISTANCE: parent.querySelector("input[name^='distance']").value,
+        UNIT: parent.querySelector("select[name^='unit'] option:checked").value,
+    });
+}
+
 var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 function updateDayOfWeek() {
     var inputs = document.querySelectorAll("#new-day legend input");
@@ -76,6 +97,11 @@ function addBlankWorkout(index) {
     var workoutTemplate = document.querySelector("script[type='text/template'][name='blank-workout']");
     workoutTemplate = _.template(workoutTemplate.innerHTML);
     document.querySelector("#new-day .workouts").innerHTML += workoutTemplate({ index: index });
+    _.each(document.querySelectorAll("#new-day .workout-row:last-child input"), function(i) {
+        i.addEventListener("blur", function() {
+            updatePace(this);
+        });
+    });
 }
 
 function generateList(days) {
@@ -85,12 +111,6 @@ function generateList(days) {
     for (var i = 0; i < days.length; i++) {
         list.innerHTML += template(days[i]);
     }
-}
-
-// what about swimming?
-function mightHavePace(workout) {
-    var a = workout.ACTIVITY;
-    return a === "erging" || a === "running" || a.startsWith("bik");
 }
 
 function timeToString(time) {
@@ -110,4 +130,15 @@ function timeToString(time) {
     }
     text += Math.round(seconds * 10) / 10;  // at most one decimal
     return text;
+}
+
+function stringToTime(string) {
+    var time = 0;
+    var factor = 1;
+    var pieces = string.split(":");
+    for (var i = pieces.length - 1; i >= 0; i--) {
+        time += pieces[i] * factor;
+        factor *= 60;
+    }
+    return time;
 }

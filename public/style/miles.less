@@ -65,8 +65,12 @@ ul {
     margin: @spacingWide 25%;
     width: 50%;
 
-    input, select:not(#new-activity) {
+    input, select:not(.new-activity) {
         width: 50px;
+        margin-left: @spacingNarrow;
+    }
+
+    #pace {
         margin-left: @spacingNarrow;
     }
 
@@ -78,14 +82,14 @@ ul {
         margin-right: @spacingNormal;
     }
 
-    .row {
+    .workout-row, .input-row {
         margin: 0 0 @spacingNormal 0;
         .clearfix();
     }
 
     .workouts {
         .clearfix();
-        input, select:not(#new-activity) {
+        input, select:not(.new-activity) {
             width: 75px;
         }
     }
