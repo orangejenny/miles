@@ -101,7 +101,7 @@ print qq{
             <script type="text/template" name="blank-workout">
                 <div class="row">
                     <div class="pull-left">
-                        <select name="activity<%= index %>">
+                        <select id="new-activity" name="activity<%= index %>">
                             <!-- TODO: pull from data -->
                             <option>running</option>
                             <option>erging</option>
@@ -121,7 +121,11 @@ print qq{
                         </div>
                         <div class="row">
                             <input type="text" name="distance<%= index %>" placeholder="distance" />
-                            <input type="text" name="unit<%= index %>" placeholder="unit" />
+                            <select name="unit<%= index %>">
+                                <option>mi</option>
+                                <option>km</option>
+                                <option>m</option>
+                            </select>
                             <input type="text" name="time<%= index %>" placeholder="time" />
                         </div>
                     </div>
