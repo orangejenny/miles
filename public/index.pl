@@ -60,7 +60,6 @@ print qq{
             <title>Miles</title>
     	</head>
     	<body>
-            <div id="calendar"></div>
             <form id="new-day" method="POST">
                 <fieldset>
                     <legend>
@@ -78,6 +77,7 @@ print qq{
                     <button type="submit" class="primary">Save</button>
                 </fieldset>
             </form>
+            <div id="calendar"></div>
             <ul id="day-list"></ul>
     
             <script type="text/template" name="day">

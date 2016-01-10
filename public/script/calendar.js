@@ -1,26 +1,28 @@
 // Adapted from http://bl.ocks.org/mbostock/4063318
-    var width = 960,
-        height = 136,
-        cellSize = 17;
+    var cellSize = 17,
+        width = cellSize * 53 + 2,  // offset to account for month path width
+        height = cellSize * 7 + 5;  // offset to account for month path width plus vertical margin between years
 
 function generateCalendar(json) {
+    var minDate = new Date(d3.min(json, function(d) { return d.DAY; })),
+        maxDate = new Date(d3.max(json, function(d) { return d.DAY; }));
 
-    var minYear = 2015,
-        maxYear = 2017;
-    
     var format = d3.time.format("%Y-%m-%d");
+
+    d3.select("#calendar").attr("width", 3000);
     
     var svg = d3.select("#calendar").selectAll("svg")
-        .data(d3.range(minYear, maxYear))
+        .data(d3.range(minDate.getFullYear(), maxDate.getFullYear() + 1))
       .enter().append("svg")
         .attr("width", width)
         .attr("height", height)
-        .attr("class", "RdYlGn")
       .append("g")
-        .attr("transform", "translate(" + ((width - cellSize * 53) / 2) + "," + (height - cellSize * 7 - 1) + ")");
+        .attr("transform", "translate(1, 1)");  // account for month path width
     
     var rect = svg.selectAll(".day")
-        .data(function(d) { return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
+        .data(function(d) {
+            return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1));
+         })
       .enter().append("rect")
         .attr("class", "day")
         .attr("width", cellSize)
@@ -33,7 +35,9 @@ function generateCalendar(json) {
         .text(function(d) { return d; });
     
     svg.selectAll(".month")
-        .data(function(d) { return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
+        .data(function(d) {
+            return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1));
+         })
       .enter().append("path")
         .attr("class", "month")
         .attr("d", monthPath);
