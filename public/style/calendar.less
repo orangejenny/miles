@@ -3,21 +3,25 @@ body {
   shape-rendering: crispEdges;
 }
 
-#calendar .day {
-  fill: #fff;
-  stroke: #ccc;
+#calendar {
+    text-align: center;
+
+    .day {
+        fill: #fff;
+        stroke: #ccc;
+    }
+
+    .month {
+        fill: none;
+        stroke: #000;
+        stroke-width: 2px;
+    }
 }
 
-#calendar .month {
-  fill: none;
-  stroke: #000;
-  stroke-width: 2px;
-}
-
-#calendar .running { fill: green; }
-#calendar .erging { fill: orange; }
-#calendar .lifting { fill: yellow; }
-#calendar .crossfit { fill: purple; }
-#calendar .sculling { fill: aqua; }
-#calendar .swimming { fill: blue; }
-#calendar .other { fill: #eeeeee; }
+#calendar .running { fill: #76f6bf; }
+#calendar .erging { fill: #ffbd55; }
+#calendar .lifting { fill: #c59be2; }
+#calendar .crossfit { fill: #7771c1; }
+#calendar .sculling { fill: #9edbf9; }
+#calendar .swimming { fill: #1e98d3; }
+#calendar .other { fill: #ddd; }

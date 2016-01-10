@@ -1,9 +1,91 @@
+@borderRadius: 5px;
+@spacingWide: 20px;
+@spacingNormal: 10px;
+@spacingNarrow: 5px;
+
 body {
 	font-family: sans-serif;
 }
 
-#new-day {
+input[type="text"], select, button, textarea {
+    border-radius: @borderRadius;
+    padding: @spacingNarrow;
+    border: 1px solid #ccc;
+    background-color: white;
+}
 
+input[type="text"], select, button {
+    height: 25px;
+}
+
+button {
+    background-color: #fafafa;
+    padding: @spacingNarrow @spacingNormal;
+    cursor: pointer;
+    font-weight: bold;
+    color: #666;
+
+    &:hover {
+        background-color: darken(#fafafa, 5%);
+    }
+
+    &.primary {
+        color: white;
+        background-color: #2495ea;
+        &:hover {
+            background-color: darken(#2495ea, 5%);
+        }
+    }
+}
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
+.clearfix() {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+#new-day {
+    margin: @spacingWide 25%;
+    width: 50%;
+
+    input {
+        width: 50px;
+        margin-left: @spacingNarrow;
+    }
+
+    textarea {
+        width: 100%;
+    }
+
+    .activity {
+        margin-right: @spacingNormal;
+    }
+
+    .row {
+        margin: 0 0 @spacingNormal 0;
+        .clearfix();
+    }
+
+    .workouts {
+        .clearfix();
+        input {
+            width: 75px;
+        }
+    }
 }
 
 #day-list {

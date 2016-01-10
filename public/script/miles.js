@@ -39,14 +39,19 @@ document.addEventListener('DOMContentLoaded', function() {
         generateCalendar(json);
     });
 
-    var workoutTemplate = document.querySelector("script[type='text/template'][name='blank-workout']");
-    workoutTemplate = _.template(workoutTemplate.innerHTML);
-    var workoutIndex = 0;
+    var workoutIndex = 1;
+    addBlankWorkout(0);
     document.getElementById("add-workout").addEventListener("click", function() {
-        document.querySelector("#new-day .workouts").innerHTML += workoutTemplate({ index: workoutIndex });
+        addBlankWorkout(workoutIndex);
         workoutIndex++;
     });
 });
+
+function addBlankWorkout(index) {
+    var workoutTemplate = document.querySelector("script[type='text/template'][name='blank-workout']");
+    workoutTemplate = _.template(workoutTemplate.innerHTML);
+    document.querySelector("#new-day .workouts").innerHTML += workoutTemplate({ index: index });
+}
 
 function generateList(days) {
     var list = document.getElementById("day-list");
