@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function generateList(days) {
-    var list = document.getElementById("list");
+    var list = document.getElementById("day-list");
     var template = document.querySelector("script[type='text/template'][name='day']");
     template = _.template(template.innerHTML);
     for (var i = 0; i < days.length; i++) {

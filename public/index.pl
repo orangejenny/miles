@@ -69,7 +69,7 @@ print qq{
                     <button type="submit">Save</button>
                 </fieldset>
             </form>
-            <ul id="list"></ul>
+            <ul id="day-list"></ul>
     
             <script type="text/template" name="day">
                 <li>
