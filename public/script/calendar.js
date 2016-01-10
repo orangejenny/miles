@@ -1,6 +1,5 @@
 // Adapted from http://bl.ocks.org/mbostock/4063318
     var cellSize = 17,
-        width = cellSize * 53 + 2,  // offset to account for month path width
         height = cellSize * 7 + 5;  // offset to account for month path width plus vertical margin between years
 
 function generateCalendar(json) {
@@ -9,18 +8,29 @@ function generateCalendar(json) {
 
     var format = d3.time.format("%Y-%m-%d");
 
-    d3.select("#calendar").attr("width", 3000);
-    
     var svg = d3.select("#calendar").selectAll("svg")
         .data(d3.range(minDate.getFullYear(), maxDate.getFullYear() + 1))
       .enter().append("svg")
-        .attr("width", width)
+        .attr("width", function(d) {
+            var weeks = 53;
+            if (d === minDate.getFullYear()) {
+                weeks = 53 - d3.time.weekOfYear(new Date(d, minDate.getMonth(), 1));
+            } else if (d === maxDate.getFullYear()) {
+                weeks = d3.time.weekOfYear(new Date(d, maxDate.getMonth() + 1, 1)) + 1;
+            }
+            return weeks * cellSize + 2 + 5;  // offsets to account for month path width and horizontal space between years
+        })
         .attr("height", height)
       .append("g")
-        .attr("transform", "translate(1, 1)");  // account for month path width
+        .attr("transform", "translate(1, 1)");   // account for month path width
     
     var rect = svg.selectAll(".day")
         .data(function(d) {
+            if (d === minDate.getFullYear()) {
+                return d3.time.days(new Date(d, minDate.getMonth(), 1), new Date(d + 1, 0, 1));
+            } else if (d === maxDate.getFullYear()) {
+                return d3.time.days(new Date(d, 0, 1), new Date(d, maxDate.getMonth() + 1, 1));
+            }
             return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1));
          })
       .enter().append("rect")
@@ -36,6 +46,11 @@ function generateCalendar(json) {
     
     svg.selectAll(".month")
         .data(function(d) {
+            if (d === minDate.getFullYear()) {
+                return d3.time.months(new Date(d, minDate.getMonth(), 1), new Date(d + 1, 0, 1));
+            } else if (d === maxDate.getFullYear()) {
+                return d3.time.months(new Date(d, 0, 1), new Date(d, maxDate.getMonth() + 1, 1));
+            }
             return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1));
          })
       .enter().append("path")
