@@ -51,6 +51,15 @@ document.addEventListener('DOMContentLoaded', function() {
     _.each(document.querySelectorAll("#new-day legend input"), function(i) {
         i.addEventListener("blur", updateDayOfWeek);
     });
+
+    document.querySelector(".add-day button").addEventListener("click", function() {
+        document.querySelector(".add-day").style.display = "none";
+        document.querySelector(".not-legend").style.display = "block";
+    });
+    document.querySelector("#cancel").addEventListener("click", function() {
+        document.querySelector(".add-day").style.display = "block";
+        document.querySelector(".not-legend").style.display = "none";
+    });
 });
 
 function getPace(workout) {

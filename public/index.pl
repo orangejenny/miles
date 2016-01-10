@@ -68,13 +68,19 @@ print qq{
                         <input type="text" name="day" placeholder="day" maxlength="4" value="$day" />
                         <input type="text" name="year" placeholder="year" maxlength="4" value="$year" />
                     </legend>
-                    <input type="hidden" name="new" value="1" />
-                    <button type="button" id="add-workout" class="pull-right">Add another workout</button>
-                    <div class="workouts"></div>
-                    <div class="input-row">
-                        <textarea name="notes" placeholder="How was today?"></textarea>
+                    <div class="not-legend hide">
+                        <input type="hidden" name="new" value="1" />
+                        <button type="button" id="add-workout" class="pull-right">Add another workout</button>
+                        <div class="workouts"></div>
+                        <div class="input-row">
+                            <textarea name="notes" placeholder="How was today?"></textarea>
+                        </div>
+                        <button type="submit" class="primary">Save</button>
+                        <button type="button" id="cancel">Cancel</button>
                     </div>
-                    <button type="submit" class="primary">Save</button>
+                    <div class="add-day">
+                        <button type="button">Blank Day</button>
+                    </div>
                 </fieldset>
             </form>
             <div id="calendar"></div>
