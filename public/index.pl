@@ -63,7 +63,7 @@ print qq{
             <form id="new-day" method="POST">
                 <fieldset>
                     <legend>
-                        <span>Friday</span>
+                        <span id="day-of-week"></span>
                         <input type="text" name="month" placeholder="month" maxlength="4" value="$month" />
                         <input type="text" name="day" placeholder="day" maxlength="4" value="$day" />
                         <input type="text" name="year" placeholder="year" maxlength="4" value="$year" />

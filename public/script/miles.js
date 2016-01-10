@@ -51,7 +51,26 @@ document.addEventListener('DOMContentLoaded', function() {
         addBlankWorkout(workoutIndex);
         workoutIndex++;
     });
+
+    updateDayOfWeek();
+    _.each(document.querySelectorAll("#new-day legend input"), function(i) {
+        i.addEventListener("blur", updateDayOfWeek);
+    });
 });
+
+var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+function updateDayOfWeek() {
+    var inputs = document.querySelectorAll("#new-day legend input");
+    var values = {};
+    var day = "";
+    _.each(inputs, function(i) {
+        values[i.name] = +i.value;
+    });
+    if (_.compact(_.values(values)).length === 3) {
+        day = days[(new Date(values.year, values.month - 1, values.day)).getDay()] + ",";
+    }
+    document.getElementById("day-of-week").innerHTML = day;
+}
 
 function addBlankWorkout(index) {
     var workoutTemplate = document.querySelector("script[type='text/template'][name='blank-workout']");
