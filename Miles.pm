@@ -53,7 +53,7 @@ sub AddDay {
     foreach my $workout (@{ $args->{WORKOUTS} }) {
         my @columns = ('day_id');
         my @binds = ($dayid);
-        foreach my $column (map { uc $_ } qw(activity time distance sets reps weight unit)) {
+        foreach my $column (map { uc $_ } qw(activity time distance sets reps weight unit success)) {
             if ($workout->{$column}) {
                 push(@columns, lc $column);
                 push(@binds, $workout->{$column});
@@ -90,7 +90,7 @@ sub ListDays {
         SQL => qq{
             select
                 days.id, days.day, days.notes,
-                workouts.id, workouts.activity, workouts.time, workouts.distance, workouts.sets, workouts.reps, workouts.weight, workouts.unit
+                workouts.id, workouts.activity, workouts.time, workouts.distance, workouts.sets, workouts.reps, workouts.weight, workouts.unit, workouts.success
             from
                 days, workouts
             where
@@ -104,7 +104,7 @@ sub ListDays {
                 days.day desc, days.id
         },
         BINDS => [lc $args->{USERNAME}],
-        COLUMNS => [qw(id day notes workoutid activity time distance sets reps weight unit)],
+        COLUMNS => [qw(id day notes workoutid activity time distance sets reps weight unit success)],
     });
     
     my $day = {};
@@ -130,6 +130,7 @@ sub ListDays {
             REPS => $row->{REPS},
             WEIGHT => $row->{WEIGHT},
             UNIT => $row->{UNIT},
+            SUCCESS => $row->{SUCCESS},
         };
         push(@{ $day->{WORKOUTS} }, $workout);
     }

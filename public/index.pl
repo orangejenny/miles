@@ -19,12 +19,13 @@ my $error = "";
 my $username = $fdat->{USERNAME} || "Jenny";
 my $notusername = $username eq "Tom" ? "Jenny" : "Tom";
 
+use Data::Dumper;
 if ($fdat->{NEW} == 1) {
     my $day = sprintf("%s-%s-%s", $fdat->{YEAR}, $fdat->{MONTH}, $fdat->{DAY});
     my @workouts = ();
     while ($fdat->{"ACTIVITY" . scalar(@workouts)}) {
         my $workout = {};
-        foreach my $param (qw(ACTIVITY SETS REPS WEIGHT DISTANCE UNIT TIME)) {
+        foreach my $param (qw(ACTIVITY SETS REPS WEIGHT DISTANCE UNIT TIME SUCCESS)) {
             $workout->{$param} = $fdat->{$param . scalar(@workouts)};
         }
         if ($workout->{TIME}) {
@@ -35,6 +36,9 @@ if ($fdat->{NEW} == 1) {
                 $factor *= 60;
             }
             $workout->{TIME} = $time;
+        }
+        if ($workout->{SUCCESS}) {
+            $workout->{SUCCESS} = 1;
         }
         push(@workouts, $workout);
     }
@@ -139,6 +143,7 @@ print qq{
                             <input type="text" name="sets<%= index %>" placeholder="sets" />
                             <input type="text" name="reps<%= index %>" placeholder="reps" />
                             <input type="text" name="weight<%= index %>" placeholder="weight" />
+                            <input type="checkbox" name="success<%= index %>" checked />
                         </div>
                         <div class="input-row">
                             <input type="text" name="distance<%= index %>" placeholder="distance" />

@@ -74,24 +74,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function serializeWorkout(workout, include_time) {
+function serializeWorkout(workout, include_results) {
     var text = workout.ACTIVITY;
     if (workout.SETS) {
         text += " " + workout.SETS + " x";
     }
     if (workout.REPS) {
         text += " " + workout.REPS;
-        if (workout.DISTANCE || include_time && workout.TIME) {
+        if (workout.DISTANCE || include_results && workout.TIME) {
             text += " x";
         }
     }
     if (workout.DISTANCE) {
         text += " " + workout.DISTANCE + " " + workout.UNIT;
-        if (include_time && workout.TIME) {
+        if (include_results && workout.TIME) {
             text += " in"
         }
     }
-    if (include_time && workout.TIME) {
+    if (include_results && workout.TIME) {
         text += " " + timeToString(workout.TIME);
         var pace = getPace(workout);
         if (pace) {
@@ -100,6 +100,11 @@ function serializeWorkout(workout, include_time) {
     }
     if (workout.WEIGHT) {
         text += " @ " + workout.WEIGHT + "lb";
+    }
+    if (include_results) {
+        if (!workout.SUCCESS) {
+            text += " (FAIL)";
+        }
     }
     text = text.trim();
     return text;
