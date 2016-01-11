@@ -32,7 +32,7 @@ sub AddDay {
         COLUMNS => ['id'],
     });
     if (scalar(@existing)) {
-        return = sprintf("Duplicate entry; there is already an entry for %s.", $args->{DAY});
+        return sprintf("Duplicate entry; there is already an entry for %s.", $args->{DAY});
     }
 
     my $sql = qq{
