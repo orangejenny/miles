@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
         var skeletons = {};
         var index = 0;
         var buttonBar = document.querySelector(".add-day");
+        buttonBar.querySelector("button").addEventListener("click", function() {
+            addBlankWorkout();
+            document.querySelector(".add-day").style.display = "none";
+            document.querySelector(".not-legend").style.display = "block";
+        });
         while (index < json.length && _.keys(skeletons).length < 4) {
             var day = json[index];
             var skeleton = _.map(day.WORKOUTS, function(w) { return serializeWorkout(w); }).join("<br>");
