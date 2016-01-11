@@ -15,8 +15,13 @@ input[type="text"], select, button, textarea {
     background-color: white;
 }
 
-input[type="text"], select, button {
-    height: 25px;
+@inputHeight: 25px;
+input[type="text"], button {
+    min-height: @inputHeight;
+}
+
+select {
+    height: @inputHeight;
 }
 
 button {
@@ -83,9 +88,14 @@ ul {
     margin: @spacingWide 25%;
     width: 50%;
 
-    input[type='text'], select:not(.new-activity) {
+    input[type='text'], select {
         width: 50px;
-        margin-left: @spacingNarrow;
+        margin-right: @spacingNarrow;
+        margin-bottom: @spacingNarrow;
+    }
+
+    .new-activity {
+        width: auto;
     }
 
     #pace {
@@ -100,20 +110,27 @@ ul {
         margin-right: @spacingNormal;
     }
 
-    .workout-row, .input-row {
-        margin: 0 0 @spacingNormal 0;
-        .clearfix();
-    }
-
     .workouts {
         .clearfix();
         input[type='text'], select:not(.new-activity) {
             width: 75px;
         }
+
+        .workout-row {
+            margin: 0 0 @spacingNormal 0;
+            .clearfix();
+        }
+
+        .input-row {
+            .clearfix();
+        }
     }
 
-    .add-day button {
-        margin-right: @spacingNarrow;
+    .add-day {
+        button {
+            margin-right: @spacingNarrow;
+            margin-bottom: @spacingNarrow;
+        }
     }
 }
 
