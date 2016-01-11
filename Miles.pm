@@ -27,12 +27,12 @@ sub AddDay {
 
     # TODO: transaction for all of this
     my @existing = Miles::Results($dbh, {
-        SQL => "select id from days where day = ?",
-        BINDS => [$args->{DAY}],
+        SQL => "select id from days where day = ? and username = ?",
+        BINDS => [$args->{DAY}, lc $args->{USERNAME}],
         COLUMNS => ['id'],
     });
     if (scalar(@existing)) {
-        $error = sprintf("Duplicate entry; there is already an entry for %s.", $args->{DAY});
+        return = sprintf("Duplicate entry; there is already an entry for %s.", $args->{DAY});
     }
 
     my $sql = qq{
