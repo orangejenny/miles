@@ -16,6 +16,7 @@ sub Config {
 # Parameters:
 #   DAY: string
 #   NOTES: string
+#   USERNAME: string
 #   WORKOUTS: arrayref of hashrefs
 #
 # Return Value: Error message, or blank string if successful.
@@ -36,11 +37,11 @@ sub AddDay {
 
     my $sql = qq{
         insert into days (day, notes, created_at, updated_at, user)
-        values (?, ?, now(), now(), 'jenny')
+        values (?, ?, now(), now(), ?)
     };
     Miles::Results($dbh, {
         SQL => $sql,
-        BINDS => [$args->{DAY}, $args->{NOTES}],
+        BINDS => [$args->{DAY}, $args->{NOTES}, lc $args->{USERNAME}],
         SKIPFETCH => 1,
     });
     my @dayids = Miles::Results($dbh, {
@@ -77,7 +78,8 @@ sub AddDay {
 #
 # Description: Fetch a range of days, along with their workouts
 #
-# Parameters: None
+# Parameters:
+#   USERNAME
 #
 # Return Value: Array or arrayref of hashrefs
 ################################################################
@@ -97,9 +99,11 @@ sub ListDays {
                     extract(year from subdate(now(), interval 1 year)), '-',
                     extract(month from subdate(now(), interval 1 year)), '-01'
                 )
+                and days.user = ?
             order by
                 days.day desc, days.id
         },
+        BINDS => [lc $args->{USERNAME}],
         COLUMNS => [qw(id day notes workoutid activity time distance sets reps weight unit)],
     });
     

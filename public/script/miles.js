@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    d3.json("data.pl", function(error, json) {
+    var username = document.querySelector("select[name='username'] option:checked").value;
+    d3.json("data.pl?username=" + username, function(error, json) {
         if (error) {
             throw error;
         }
@@ -44,6 +45,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         generateList(json);
         generateCalendar(json);
+    });
+
+    document.querySelector("select[name='username']").addEventListener("change", function() {
+        var parent = this;
+        while (parent !== document && parent.tagName.toLowerCase() !== "form") {
+            parent = parent.parentElement;
+        }
+        parent.submit();
     });
 
     document.getElementById("add-workout").addEventListener("click", addBlankWorkout);
@@ -106,6 +115,7 @@ function getPace(workout) {
 
 function updatePace(input) {
     var parent = input;
+    // TODO: make util function
     while (parent !== document && !parent.classList.contains("workout-row")) {
         parent = parent.parentElement;
     }
