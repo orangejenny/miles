@@ -1,7 +1,11 @@
 @import "imports.less";
 
+* {
+    box-sizing: border-box;
+}
+
 body {
-	font-family: sans-serif;
+	font-family: Verdana;
 }
 
 input[type="text"], select, button, textarea {
@@ -113,9 +117,27 @@ ul {
     width: 90%;
     margin: 0 5%;
 
-    li {
+    > li {
         @dayWidth: 150px;
         .clearfix();
+
+        &:nth-child(odd) {
+            background-color: #fafafa;
+            &:hover {
+                background-color: darken(#fafafa, 10%);
+            }
+        }
+
+        &:nth-child(even) {
+            background-color: #eee;
+            &:hover {
+                background-color: darken(#eee, 10%);
+            }
+        }
+
+        .day, .workouts, .notes {
+            padding: @spacingNarrow;
+        }
 
         .day {
             float: left;

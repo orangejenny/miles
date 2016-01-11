@@ -12,6 +12,10 @@ body {
     .day {
         fill: #fff;
         stroke: #ddd;
+
+        &:hover {
+            opacity: 0.5;
+        }
     }
 
     .month {
@@ -21,10 +25,10 @@ body {
     }
 }
 
-#calendar .running { fill: #76f6bf; }
-#calendar .erging { fill: #ffbd55; }
-#calendar .lifting { fill: #c59be2; }
-#calendar .crossfit { fill: #7771c1; }
-#calendar .sculling { fill: #9edbf9; }
-#calendar .swimming { fill: #1e98d3; }
-#calendar .other { fill: #ddd; }
+#calendar .running { fill: lighten(green, 20%); }
+#calendar .erging { fill: lighten(orange, 20%); }
+#calendar .lifting { fill: lighten(purple, 20%); }
+#calendar .crossfit { fill: lighten(red, 20%); }
+#calendar .sculling { fill: lighten(aqua, 20%); }
+#calendar .swimming { fill: lighten(blue, 20%); }
+#calendar .other { fill: lighten(yellow, 20%); }
