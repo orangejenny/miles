@@ -3,35 +3,41 @@ document.addEventListener('DOMContentLoaded', function() {
         if (error) {
             throw error;
         }
+
+        var skeletons = {};
+        var index = 0;
+        var buttonBar = document.querySelector(".add-day");
+        while (index < json.length && _.keys(skeletons).length < 4) {
+            var day = json[index];
+            var skeleton = _.map(day.WORKOUTS, function(w) { return serializeWorkout(w); }).join("<br>");
+            if (!skeletons[skeleton]) {
+                skeletons[skeleton] = day.WORKOUTS;
+                var button = document.createElement("button");
+                button.type = "button";
+                button.innerHTML = skeleton;
+                button.setAttribute("data-workouts", JSON.stringify(day.WORKOUTS));
+                button.addEventListener("click", function() {
+                    var workouts = this.getAttribute("data-workouts");
+                    workouts = JSON.parse(workouts);
+                    _.each(workouts, function(workout, index) {
+                        var workoutDiv = addBlankWorkout();
+                        _.each(['activity', 'unit', 'sets', 'reps', 'weight', 'distance'], function(name) {
+                            if (workout[name.toUpperCase()]) {
+                                workoutDiv.querySelector("[name^='" + name + "']").value = workout[name.toUpperCase()] || "";
+                            }
+                        });
+                    });
+                    document.querySelector(".add-day").style.display = "none";
+                    document.querySelector(".not-legend").style.display = "block";
+                });
+                buttonBar.appendChild(button);
+            }
+            index++;
+        }
+
         json = _.map(json, function(day) {
             day.WORKOUTS = _.map(day.WORKOUTS, function(w) {
-                var text = w.ACTIVITY;
-                if (w.SETS) {
-                    text += " " + w.SETS + " x";
-                }
-                if (w.REPS) {
-                    text += " " + w.REPS;
-                    if (w.DISTANCE || w.TIME) {
-                        text += " x";
-                    }
-                }
-                if (w.DISTANCE) {
-                    text += " " + w.DISTANCE + " " + w.UNIT;
-                    if (w.TIME) {
-                        text += " in"
-                    }
-                }
-                if (w.TIME) {
-                    text += " " + timeToString(w.TIME);
-                    var pace = getPace(w);
-                    if (pace) {
-                        text += " (" + pace + ")";
-                    }
-                }
-                if (w.WEIGHT) {
-                    text += " @ " + w.WEIGHT + "lb";
-                }
-                w.DESCRIPTION = text.trim();
+                w.DESCRIPTION = serializeWorkout(w, true);
                 return w;
             });
             return day;
@@ -47,34 +53,43 @@ document.addEventListener('DOMContentLoaded', function() {
         i.addEventListener("blur", updateDayOfWeek);
     });
 
-    _.each(document.querySelectorAll(".add-day button"), function(button) {
-        button.addEventListener("click", function() {
-            var workouts = button.getAttribute("data-workouts");
-            if (workouts) {
-                workouts = JSON.parse(workouts);
-                _.each(workouts, function(workout, index) {
-                    var workoutDiv = addBlankWorkout();
-                    _.each(['activity', 'unit', 'sets', 'reps', 'weight', 'distance', 'time'], function(name) {
-                        if (workout[name.toUpperCase()]) {
-                            workoutDiv.querySelector("[name^='" + name + "']").value = workout[name.toUpperCase()] || "";
-                        }
-                    });
-                    updatePace(workoutDiv.querySelector("input[name^='time']"));
-                });
-            } else {
-                addBlankWorkout();
-            }
-            document.querySelector(".add-day").style.display = "none";
-            document.querySelector(".not-legend").style.display = "block";
-        });
-    });
-
     document.querySelector("#cancel").addEventListener("click", function() {
         document.querySelector(".add-day").style.display = "block";
         document.querySelector(".not-legend").style.display = "none";
         document.querySelector("#new-day .workouts").innerHTML = "";
     });
 });
+
+function serializeWorkout(workout, include_time) {
+    var text = workout.ACTIVITY;
+    if (workout.SETS) {
+        text += " " + workout.SETS + " x";
+    }
+    if (workout.REPS) {
+        text += " " + workout.REPS;
+        if (workout.DISTANCE || include_time && workout.TIME) {
+            text += " x";
+        }
+    }
+    if (workout.DISTANCE) {
+        text += " " + workout.DISTANCE + " " + workout.UNIT;
+        if (include_time && workout.TIME) {
+            text += " in"
+        }
+    }
+    if (include_time && workout.TIME) {
+        text += " " + timeToString(workout.TIME);
+        var pace = getPace(workout);
+        if (pace) {
+            text += " (" + pace + ")";
+        }
+    }
+    if (workout.WEIGHT) {
+        text += " @ " + workout.WEIGHT + "lb";
+    }
+    text = text.trim();
+    return text;
+}
 
 function getPace(workout) {
     if (workout.TIME && workout.DISTANCE) {
