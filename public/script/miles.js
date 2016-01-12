@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         while (index < json.length && _.keys(skeletons).length < 4) {
             var day = json[index];
-            var skeleton = _.map(day.WORKOUTS, function(w) { return serializeWorkout(w); }).join("<br>");
+            var skeleton = _.map(day.WORKOUTS, function(w) { return serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME', 'SUCCESS'])); }).join("<br>");
             if (!skeletons[skeleton]) {
                 skeletons[skeleton] = day.WORKOUTS;
                 var button = document.createElement("button");
@@ -78,24 +78,24 @@ function closest(element, lambda) {
     return closest;
 }
 
-function serializeWorkout(workout, include_results) {
+function serializeWorkout(workout) {
     var text = workout.ACTIVITY;
     if (workout.SETS) {
         text += " " + workout.SETS + " x";
     }
     if (workout.REPS) {
         text += " " + workout.REPS;
-        if (workout.DISTANCE || include_results && workout.TIME) {
+        if (workout.DISTANCE || workout.TIME) {
             text += " x";
         }
     }
     if (workout.DISTANCE) {
         text += " " + workout.DISTANCE + " " + workout.UNIT;
-        if (include_results && workout.TIME) {
+        if (workout.TIME) {
             text += " in"
         }
     }
-    if (include_results && workout.TIME) {
+    if (workout.TIME) {
         text += " " + timeToString(workout.TIME);
         var pace = getPace(workout);
         if (pace) {
@@ -105,10 +105,8 @@ function serializeWorkout(workout, include_results) {
     if (workout.WEIGHT) {
         text += " @ " + workout.WEIGHT + "lb";
     }
-    if (include_results) {
-        if (!workout.SUCCESS) {
-            text += " (FAIL)";
-        }
+    if (!_.isUndefined(workout.SUCCESS) && !workout.SUCCESS) {
+        text += " (FAIL)";
     }
     text = text.trim();
     return text;
