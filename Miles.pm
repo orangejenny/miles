@@ -27,7 +27,7 @@ sub AddDay {
 
     # TODO: transaction for all of this
     my @existing = Miles::Results($dbh, {
-        SQL => "select id from days where day = ? and username = ?",
+        SQL => "select id from days where day = ? and user = ?",
         BINDS => [$args->{DAY}, lc $args->{USERNAME}],
         COLUMNS => ['id'],
     });
