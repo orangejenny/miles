@@ -119,6 +119,16 @@ ul {
         .workout-row {
             margin: 0 0 @spacingNormal 0;
             .clearfix();
+
+            .remove-workout {
+                display: none;
+            }
+
+            &:last-child:not(:first-child) {
+                .remove-workout {
+                    display: block;
+                }
+            }
         }
 
         .input-row {

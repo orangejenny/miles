@@ -53,11 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.querySelector("select[name='username']").addEventListener("change", function() {
-        var parent = this;
-        while (parent !== document && parent.tagName.toLowerCase() !== "form") {
-            parent = parent.parentElement;
-        }
-        parent.submit();
+        closest(this, function(e) { return e.tagName.toLowerCase() === "form"; }).submit();
     });
 
     document.getElementById("add-workout").addEventListener("click", addBlankWorkout);
@@ -73,6 +69,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector("#new-day .workouts").innerHTML = "";
     });
 });
+
+function closest(element, lambda) {
+    var closest = element;
+    while (closest && !lambda.call(null, closest)) {
+        closest = closest.parentElement;
+    }
+    return closest;
+}
 
 function serializeWorkout(workout, include_results) {
     var text = workout.ACTIVITY;
@@ -124,11 +128,7 @@ function getPace(workout) {
 }
 
 function updatePace(input) {
-    var parent = input;
-    // TODO: make util function
-    while (parent !== document && !parent.classList.contains("workout-row")) {
-        parent = parent.parentElement;
-    }
+    parent = closest(input, function(e) { return e.classList.contains("workout-row"); });
     parent.querySelector(".pace").innerHTML = getPace({
         ACTIVITY: parent.querySelector("select[name^='activity'] option:checked").value,
         TIME: stringToTime(parent.querySelector("input[name^='time']").value),
@@ -168,6 +168,12 @@ function addBlankWorkout() {
             updatePace(this);
         });
     });
+
+    div.querySelector(".remove-workout").addEventListener("click", function() {
+        var workout = closest(this, function(e) { return e.classList.contains("workout-row"); });
+        workout.parentElement.removeChild(workout);
+    });
+
     return div;
 }
 

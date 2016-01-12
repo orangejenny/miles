@@ -19,7 +19,6 @@ my $error = "";
 my $username = $fdat->{USERNAME} || "Jenny";
 my $notusername = $username eq "Tom" ? "Jenny" : "Tom";
 
-use Data::Dumper;
 if ($fdat->{NEW} == 1) {
     my $day = sprintf("%s-%s-%s", $fdat->{YEAR}, $fdat->{MONTH}, $fdat->{DAY});
     my @workouts = ();
@@ -125,17 +124,20 @@ print qq{
     
             <script type="text/template" name="blank-workout">
                 <div class="workout-row">
+                    <button type="button" class="pull-right remove-workout">Remove workout</button>
                     <div class="pull-left">
                         <select class="new-activity" name="activity<%= index %>">
                             <!-- TODO: pull from data -->
                             <option>running</option>
-                            <option>erging</option>
-                            <option>crossfit</option>
-                            <option>squats</option>
                             <option>bench press</option>
-                            <option>overhead press</option>
-                            <option>deadlifts</option>
+                            <option>chinups</option>
                             <option>cleans</option>
+                            <option>crossfit</option>
+                            <option>curls</option>
+                            <option>deadlifts</option>
+                            <option>erging</option>
+                            <option>overhead press</option>
+                            <option>squats</option>
                         </select>
                     </div>
                     <div class="pull-left">
