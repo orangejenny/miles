@@ -103,6 +103,7 @@ print qq{
             </form>
             <div id="calendar"></div>
             <ul id="day-list"></ul>
+            <div id="tooltip" class="hide"></div>
     
             <script type="text/template" name="day">
                 <li>

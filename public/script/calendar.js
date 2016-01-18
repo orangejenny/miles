@@ -66,6 +66,8 @@ function generateCalendar(json) {
             .attr("class", function(d) { return "day " + activityClass(data[d].ACTIVITY); })
             .select("title")
             .text(function(d) { return d + ": " + data[d].ACTIVITY; });
+
+    attachTooltip("#calendar g rect");
 }
 
 function activityClass(activity) {
@@ -92,4 +94,39 @@ function monthPath(t0) {
          + "H" + w1 * cellSize + "V" + (d1 + 1) * cellSize
          + "H" + (w1 + 1) * cellSize + "V" + 0
          + "H" + (w0 + 1) * cellSize + "Z";
+}
+
+function attachTooltip(selector) {
+    var positionTooltip = function() {
+        var tooltip = document.getElementById("tooltip");
+        if (tooltip.classList.contains("hide")) {
+            return;
+        }
+        if (d3.event.pageX + 10 + tooltip.clientWidth > document.body.clientWidth) {
+            tooltip.style.left = d3.event.pageX - tooltip.clientWidth - 10;
+        }
+        else {
+            tooltip.style.left = d3.event.pageX + 10;
+        }
+        if (d3.event.pageY + tooltip.clientHeight > document.body.clientHeight) {
+            tooltip.style.top = d3.event.pageY - tooltip.clientHeight;
+        }
+        else {
+            tooltip.style.top = d3.event.pageY;
+        }
+    };
+
+    d3.selectAll(selector).on("mouseenter.tooltip", function() {
+        var data = d3.select(this).data()[0];
+        var tooltip = document.getElementById("tooltip");
+        tooltip.innerHTML = data;
+        tooltip.classList.remove("hide");
+        positionTooltip();
+    });
+    d3.selectAll(selector).on("mouseleave.tooltip", function() {
+        document.getElementById("tooltip").classList.add("hide");
+    });
+    d3.selectAll(selector).on("mousemove.tooltip", function() {
+        positionTooltip();
+    });
 }
