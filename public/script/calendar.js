@@ -2,11 +2,11 @@
     var cellSize = 17,
         height = cellSize * 7 + 5;  // offset to account for month path width plus vertical margin between years
 
+var format = d3.time.format("%Y-%m-%d");
+
 function generateCalendar(json) {
     var minDate = new Date(d3.min(json, function(d) { return d.DAY; })),
         maxDate = new Date(d3.max(json, function(d) { return d.DAY; }));
-
-    var format = d3.time.format("%Y-%m-%d");
 
     var svg = d3.select("#calendar").selectAll("svg")
         .data(d3.range(minDate.getFullYear(), maxDate.getFullYear() + 1))
@@ -23,15 +23,25 @@ function generateCalendar(json) {
         .attr("height", height)
       .append("g")
         .attr("transform", "translate(1, 1)");   // account for month path width
+
+    // Roll up workout data
+    var data = d3.nest()
+                 .key(function(d) { return d.DAY; })
+                 .rollup(function(d) { return d[0]; })
+                 .map(json);
     
+    // Draw squares for days
     var rect = svg.selectAll(".day")
         .data(function(d) {
+            var days = [];
             if (d === minDate.getFullYear()) {
-                return d3.time.days(new Date(d, minDate.getMonth(), 1), new Date(d + 1, 0, 1));
+                days = d3.time.days(new Date(d, minDate.getMonth(), 1), new Date(d + 1, 0, 1));
             } else if (d === maxDate.getFullYear()) {
-                return d3.time.days(new Date(d, 0, 1), new Date(d, maxDate.getMonth() + 1, 1));
+                days = d3.time.days(new Date(d, 0, 1), new Date(d, maxDate.getMonth() + 1, 1));
+            } else {
+                days = d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1));
             }
-            return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1));
+            return days;
          })
       .enter().append("rect")
         .attr("class", "day")
@@ -39,11 +49,22 @@ function generateCalendar(json) {
         .attr("height", cellSize)
         .attr("x", function(d) { return d3.time.weekOfYear(d) * cellSize; })
         .attr("y", function(d) { return d.getDay() * cellSize; })
-        .datum(format);
+        .datum(function(day) {
+            var extra = {};
+            if (data[format(day)]) {
+                extra = data[format(day)];
+            }
+            return _.extend({
+                DATE: day,
+            }, extra);
+        });
+
+    // Color in days, based on activity
+    rect.attr("class", function(d) { return "day " + activityClass(d); })
+        .select("title")
+        .text(function(d) { return d + ": " + d.ACTIVITY; });
     
-    rect.append("title")
-        .text(function(d) { return d; });
-    
+    // Add extra-thick month boundaries
     svg.selectAll(".month")
         .data(function(d) {
             if (d === minDate.getFullYear()) {
@@ -57,26 +78,18 @@ function generateCalendar(json) {
         .attr("class", "month")
         .attr("d", monthPath);
     
-        var data = d3.nest()
-                     .key(function(d) { return d.DAY; })
-                     .rollup(function(d) { return d[0].WORKOUTS[0] || {}; })
-                     .map(json);
-    
-        rect.filter(function(d) { return d in data; })
-            .attr("class", function(d) { return "day " + activityClass(data[d].ACTIVITY); })
-            .select("title")
-            .text(function(d) { return d + ": " + data[d].ACTIVITY; });
-
     attachTooltip("#calendar g rect");
 }
 
-function activityClass(activity) {
-    if (activity === "running" || activity === "erging" || activity === "crossfit"
-        || activity === "sculling" || activity === "swimming") {
+function activityClass(data) {
+    if (!data || !data.WORKOUTS || !data.WORKOUTS.length) {
+        return "";
+    }
+    var activity = data.WORKOUTS[0].ACTIVITY;
+    if (_.contains(["running", "erging", "crossfit", "sculling", "swimming"], activity)) {
         return activity;
     }
-    if (activity === "squats" || activity === "cleans" || activity === "deadlifts"
-        || activity === "bench press" || activity === "overhead press" || activity === "barbell rows") {
+    if (_.contains(["squats", "cleans", "deadlifts", "bench press", "overhead press", "barbell rows"], activity)) {
         return "lifting";
     }
     if (activity === "treadmill") {
@@ -102,24 +115,18 @@ function attachTooltip(selector) {
         if (tooltip.classList.contains("hide")) {
             return;
         }
-        if (d3.event.pageX + 10 + tooltip.clientWidth > document.body.clientWidth) {
-            tooltip.style.left = d3.event.pageX - tooltip.clientWidth - 10;
-        }
-        else {
-            tooltip.style.left = d3.event.pageX + 10;
-        }
-        if (d3.event.pageY + tooltip.clientHeight > document.body.clientHeight) {
-            tooltip.style.top = d3.event.pageY - tooltip.clientHeight;
-        }
-        else {
-            tooltip.style.top = d3.event.pageY;
-        }
+        tooltip.style.left = d3.event.pageX + 10;
+        tooltip.style.top = d3.event.pageY;
     };
 
     d3.selectAll(selector).on("mouseenter.tooltip", function() {
         var data = d3.select(this).data()[0];
         var tooltip = document.getElementById("tooltip");
-        tooltip.innerHTML = data;
+        var description = format(data.DATE);
+        if (data.WORKOUTS) {
+            description += "<br>" + _.map(data.WORKOUTS, function(w) { return serializeWorkout(w) }).join("<br>");
+        }
+        tooltip.innerHTML = description;
         tooltip.classList.remove("hide");
         positionTooltip();
     });
