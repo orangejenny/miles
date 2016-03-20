@@ -139,6 +139,7 @@ print qq{
                             <option>erging</option>
                             <option>overhead press</option>
                             <option>squats</option>
+                            <option>circuits</option>
                         </select>
                     </div>
                     <div class="pull-left">
