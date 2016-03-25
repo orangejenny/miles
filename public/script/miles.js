@@ -116,7 +116,12 @@ function getPace(workout) {
     if (workout.TIME && workout.DISTANCE) {
         var pace = workout.TIME / workout.DISTANCE;
         if (workout.ACTIVITY === "erging") {
-            if (workout.UNIT === "km") {
+            // Paces for m workouts are given in km
+            if (workout.UNIT === "m") {
+                pace = pace * 1000;
+            }
+            // Paces for ergs are per 500m, not 1k
+            if (workout.UNIT === "km" || workout.UNIT === "m") {
                 pace = pace / 2;
             }
         }
