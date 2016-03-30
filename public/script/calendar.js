@@ -5,8 +5,11 @@
 var format = d3.time.format("%Y-%m-%d");
 
 function generateCalendar(json) {
-    var minDate = new Date(d3.min(json, function(d) { return d.DAY; })),
-        maxDate = new Date(d3.max(json, function(d) { return d.DAY; }));
+    var minDataDate = new Date(d3.min(json, function(d) { return d.DAY; })),
+        maxDataDate = new Date(d3.max(json, function(d) { return d.DAY; })),
+        // Display the full month around the min and max dates returned by data
+        minDate = new Date(minDataDate.getFullYear(), minDataDate.getMonth(), 1),
+        maxDate = new Date(maxDataDate.getFullYear(), maxDataDate.getMonth() + 1, 1);
 
     var svg = d3.select("#calendar").selectAll("svg")
         .data(d3.range(minDate.getFullYear(), maxDate.getFullYear() + 1))
@@ -14,9 +17,9 @@ function generateCalendar(json) {
         .attr("width", function(d) {
             var weeks = 53;
             if (d === minDate.getFullYear()) {
-                weeks = 53 - d3.time.weekOfYear(new Date(d, minDate.getMonth(), 1));
+                weeks = 53 - d3.time.weekOfYear(minDate);
             } else if (d === maxDate.getFullYear()) {
-                weeks = d3.time.weekOfYear(new Date(d, maxDate.getMonth() + 1, 1)) + 1;
+                weeks = d3.time.weekOfYear(maxDate) + 1;
             }
             return weeks * cellSize + 2 + 5;  // offsets to account for month path width and horizontal space between years
         })
@@ -35,9 +38,9 @@ function generateCalendar(json) {
         .data(function(d) {
             var days = [];
             if (d === minDate.getFullYear()) {
-                days = d3.time.days(new Date(d, minDate.getMonth(), 1), new Date(d + 1, 0, 1));
+                days = d3.time.days(minDate, new Date(d + 1, 0, 1));
             } else if (d === maxDate.getFullYear()) {
-                days = d3.time.days(new Date(d, 0, 1), new Date(d, maxDate.getMonth() + 1, 1));
+                days = d3.time.days(new Date(d, 0, 1), maxDate);
             } else {
                 days = d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1));
             }
@@ -47,7 +50,12 @@ function generateCalendar(json) {
         .attr("class", "day")
         .attr("width", cellSize)
         .attr("height", cellSize)
-        .attr("x", function(d) { return d3.time.weekOfYear(d) * cellSize; })
+        .attr("x", function(d) {
+            if (minDate.getFullYear() === d.getFullYear()) {
+                return (d3.time.weekOfYear(d) - d3.time.weekOfYear(minDate)) * cellSize;
+            }
+            return d3.time.weekOfYear(d) * cellSize;
+        })
         .attr("y", function(d) { return d.getDay() * cellSize; })
         .datum(function(day) {
             var extra = {};
@@ -68,15 +76,15 @@ function generateCalendar(json) {
     svg.selectAll(".month")
         .data(function(d) {
             if (d === minDate.getFullYear()) {
-                return d3.time.months(new Date(d, minDate.getMonth(), 1), new Date(d + 1, 0, 1));
+                return d3.time.months(minDate, new Date(d + 1, 0, 1));
             } else if (d === maxDate.getFullYear()) {
-                return d3.time.months(new Date(d, 0, 1), new Date(d, maxDate.getMonth() + 1, 1));
+                return d3.time.months(new Date(d, 0, 1), maxDate);
             }
             return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1));
          })
       .enter().append("path")
         .attr("class", "month")
-        .attr("d", monthPath);
+        .attr("d", function(d) { return monthPath(d, minDate); });
     
     attachTooltip("#calendar g rect");
 }
@@ -98,10 +106,11 @@ function activityClass(data) {
     return "other";
 }
 
-function monthPath(t0) {
+function monthPath(t0, min) {
     var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
-        d0 = t0.getDay(), w0 = d3.time.weekOfYear(t0),
-        d1 = t1.getDay(), w1 = d3.time.weekOfYear(t1);
+        weekOffset = (t0.getFullYear() === min.getFullYear() ? d3.time.weekOfYear(min) : 0),
+        d0 = t0.getDay(), w0 = d3.time.weekOfYear(t0) - weekOffset,
+        d1 = t1.getDay(), w1 = d3.time.weekOfYear(t1) - weekOffset;
     return "M" + (w0 + 1) * cellSize + "," + d0 * cellSize
          + "H" + w0 * cellSize + "V" + 7 * cellSize
          + "H" + w1 * cellSize + "V" + (d1 + 1) * cellSize
