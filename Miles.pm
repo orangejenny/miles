@@ -4,6 +4,8 @@ use strict;
 use DBI;
 use YAML;
 
+my $USERNAME = 'jenny';
+
 sub Config {
 	return YAML::LoadFile("../config.yml");
 }
@@ -16,7 +18,6 @@ sub Config {
 # Parameters:
 #   DAY: string
 #   NOTES: string
-#   USERNAME: string
 #   WORKOUTS: arrayref of hashrefs
 #
 # Return Value: Error message, or blank string if successful.
@@ -28,7 +29,7 @@ sub AddDay {
     # TODO: transaction for all of this
     my @existing = Miles::Results($dbh, {
         SQL => "select id from days where day = ? and user = ?",
-        BINDS => [$args->{DAY}, lc $args->{USERNAME}],
+        BINDS => [$args->{DAY}, $USERNAME],
         COLUMNS => ['id'],
     });
     if (scalar(@existing)) {
@@ -41,7 +42,7 @@ sub AddDay {
     };
     Miles::Results($dbh, {
         SQL => $sql,
-        BINDS => [$args->{DAY}, $args->{NOTES}, lc $args->{USERNAME}],
+        BINDS => [$args->{DAY}, $args->{NOTES}, $USERNAME],
         SKIPFETCH => 1,
     });
     my @dayids = Miles::Results($dbh, {
@@ -78,9 +79,6 @@ sub AddDay {
 #
 # Description: Fetch a range of days, along with their workouts
 #
-# Parameters:
-#   USERNAME
-#
 # Return Value: Array or arrayref of hashrefs
 ################################################################
 sub ListDays {
@@ -103,7 +101,7 @@ sub ListDays {
             order by
                 days.day desc, days.id
         },
-        BINDS => [lc $args->{USERNAME}],
+        BINDS => [$USERNAME],
         COLUMNS => [qw(id day notes workoutid activity time distance sets reps weight unit success)],
     });
     

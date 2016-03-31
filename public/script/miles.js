@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var username = document.querySelector("select[name='username'] option:checked").value;
-    d3.json("data.pl?username=" + username, function(error, json) {
+    d3.json("data.pl", function(error, json) {
         if (error) {
             throw error;
         }
@@ -50,10 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         generateList(json);
         generateCalendar(json);
-    });
-
-    document.querySelector("select[name='username']").addEventListener("change", function() {
-        closest(this, function(e) { return e.tagName.toLowerCase() === "form"; }).submit();
     });
 
     document.getElementById("add-workout").addEventListener("click", addBlankWorkout);

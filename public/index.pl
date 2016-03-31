@@ -15,10 +15,6 @@ print $cgi->header();
 
 my $error = "";
 
-# TODO: this couldn't be much worse
-my $username = $fdat->{USERNAME} || "Jenny";
-my $notusername = $username eq "Tom" ? "Jenny" : "Tom";
-
 if ($fdat->{NEW} == 1) {
     my $day = sprintf("%s-%s-%s", $fdat->{YEAR}, $fdat->{MONTH}, $fdat->{DAY});
     my @workouts = ();
@@ -44,7 +40,6 @@ if ($fdat->{NEW} == 1) {
     $error = Miles::AddDay($dbh, {
         DAY => $day,
         NOTES => $fdat->{NOTES},
-        USERNAME => $username,
         WORKOUTS => \@workouts,
     });
 }
@@ -73,12 +68,6 @@ print qq{
     	</head>
     	<body>
             $error
-            <form method="POST" class="pull-right">
-                <select name="username">
-                    <option>$username</option>
-                    <option>$notusername</option>
-                </select>
-            </form>
             <form id="new-day" method="POST">
                 <fieldset>
                     <legend>
@@ -89,7 +78,6 @@ print qq{
                     </legend>
                     <div class="not-legend hide">
                         <input type="hidden" name="new" value="1" />
-                        <input type="hidden" name="username" value="$username" />
                         <button type="button" id="add-workout" class="pull-right">Add another workout</button>
                         <div class="workouts"></div>
                         <div class="input-row">

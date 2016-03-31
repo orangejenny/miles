@@ -13,7 +13,5 @@ my $fdat = Miles::Fdat();
 
 print $cgi->header(-type => 'text/text');
 
-my @days = Miles::ListDays($dbh, {
-    USERNAME => $fdat->{USERNAME},
-});
+my @days = Miles::ListDays($dbh);
 print to_json(\@days);
