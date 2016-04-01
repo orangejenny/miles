@@ -68,6 +68,7 @@ print qq{
     	</head>
     	<body>
             $error
+            <div id="new-day-backdrop" class="hide"></div>
             <form id="new-day" method="POST">
                 <fieldset>
                     <legend>
@@ -91,6 +92,8 @@ print qq{
             </form>
             <div id="calendar"></div>
             <ul id="day-list"></ul>
+            <div class="day-list-fade top"></div>
+            <div class="day-list-fade bottom"></div>
             <div id="tooltip" class="hide"></div>
     
             <script type="text/template" name="day">

@@ -6,6 +6,7 @@
 
 body {
 	font-family: Georgia;
+    padding-top: 95px;
 }
 
 input[type="text"], select, button, textarea {
@@ -83,14 +84,30 @@ ul {
     padding: @spacingNormal;
 }
 
+#new-day-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: black;
+    opacity: 0.5;
+    z-index: @zIndexModalBackdrop;
+}
+
 #new-day {
+    position: fixed;
+    top: 0;
     margin: @spacingWide 25%;
     width: 50%;
+    z-index: @zIndexModal;
+    background-color: white;
+    padding: @spacingNormal;
+    border-radius: @borderRadius;
 
     input[type='text'], select {
         width: 50px;
         margin-right: @spacingNarrow;
-        margin-bottom: @spacingNarrow;
     }
 
     .new-activity {
@@ -133,6 +150,10 @@ ul {
         .input-row {
             .clearfix();
         }
+    }
+
+    .input-row {
+        margin-bottom: @spacingNarrow;
     }
 
     .add-day {

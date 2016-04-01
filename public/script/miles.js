@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
             addBlankWorkout();
             document.querySelector(".add-day").style.display = "none";
             document.querySelector(".not-legend").style.display = "block";
+            document.querySelector("#new-day-backdrop").style.display = "block";
         });
         while (index < json.length && _.keys(skeletons).length < 4) {
             var day = json[index];
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     document.querySelector(".add-day").style.display = "none";
                     document.querySelector(".not-legend").style.display = "block";
+                    document.querySelector("#new-day-backdrop").style.display = "block";
                 });
                 buttonBar.appendChild(button);
             }
@@ -58,11 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
         i.addEventListener("blur", updateDayOfWeek);
     });
 
-    document.querySelector("#cancel").addEventListener("click", function() {
-        document.querySelector(".add-day").style.display = "block";
-        document.querySelector(".not-legend").style.display = "none";
-        document.querySelector("#new-day .workouts").innerHTML = "";
-    });
+    document.getElementById("cancel").addEventListener("click", cancelDay);
+    document.getElementById("new-day-backdrop").addEventListener("click", cancelDay);
 });
 
 function closest(element, lambda) {
@@ -173,6 +172,13 @@ function addBlankWorkout() {
     });
 
     return div;
+}
+
+function cancelDay() {
+    document.querySelector(".add-day").style.display = "block";
+    document.querySelector(".not-legend").style.display = "none";
+    document.querySelector("#new-day-backdrop").style.display = "none";
+    document.querySelector("#new-day .workouts").innerHTML = "";
 }
 
 function generateList(days) {
