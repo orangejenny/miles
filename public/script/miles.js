@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return day;
         });
         generateList(json);
+        generateRecords(json);
         generateCalendar(json);
     });
 
@@ -72,8 +73,8 @@ function closest(element, lambda) {
     return closest;
 }
 
-function serializeWorkout(workout) {
-    var text = workout.ACTIVITY;
+function serializeWorkout(workout, excludeActivity) {
+    var text = excludeActivity ? '' : workout.ACTIVITY;
     if (workout.SETS) {
         text += " " + workout.SETS + " x";
     }
@@ -190,6 +191,129 @@ function generateList(days) {
     }
 }
 
+function generateRecords(allDays) {
+    var list = document.getElementById("record-list");
+    var template = document.querySelector("script[type='text/template'][name='record']");
+    template = _.template(template.innerHTML);
+
+    var daysByActivity = _.groupBy(allDays, activityClass),
+        sortedActivities = _.sortBy(_.keys(daysByActivity), function(activity) {
+            return -1 * daysByActivity[activity].length;
+        });
+
+    _.each(sortedActivities, function(activity) {
+        var records = [],
+            workouts = _.flatten(_.map(daysByActivity[activity], function(day) {    // will be sorted by day, descending
+                return _.map(day.WORKOUTS, function(w) {
+                    return _.extend(w, {
+                        DAY: day.DAY,
+                        ID: Number(w.ID),
+                        REPS: Number(w.REPS),
+                        SETS: Number(w.SETS),
+                        WEIGHT: Number(w.WEIGHT),
+                        TIME: Number(w.TIME),
+                        DISTANCE: Number(w.DISTANCE),
+                        SUCCESS: !!w.SUCCESS,
+                    });
+                });
+            }));
+        
+        // Fastest
+        if (activity === "running" || activity === "erging") {
+            var goldenDistances = [],   // lazily, but reasonably, ignoring units
+                groupBy = '';
+            if (activity === "erging") {
+                goldenDistances = [6, 2, 500];
+                groupBy = 'DISTANCE';
+            } else {
+                goldenDistances = ["long", "medium", "short"];
+                groupBy = function(w) {
+                    if (w.DISTANCE < "5") {
+                        return "short";
+                    }
+                    if (w.DISTANCE > 10) {
+                        return "long";
+                    }
+                    return "medium";
+                };
+            }
+            var workoutsByDistance = _.groupBy(_.filter(workouts, function(w) {
+                return w.DISTANCE && w.TIME && (!w.REPS || w.REPS === 1);
+            }), groupBy);
+            _.each(goldenDistances, function(distance) {
+                if (workoutsByDistance[distance]) {
+                    var min;
+                    _.each(workoutsByDistance[distance], function(w) {
+                        if (!min || min.TIME / min.DISTANCE > w.TIME / w.DISTANCE) {
+                            min = w;
+                        }
+                    });
+                    records.push({
+                        DESCRIPTION: serializeWorkout(min, true),
+                        DAY: min.DAY,
+                    });
+                }
+            });
+        }
+
+        // Total distance covered
+        if (activity === "erging" || activity === "running") {
+            var total = 0,
+                goldenUnit = activity === "erging" ? "km" : "mi";
+            _.each(workouts, function(w) {
+                var distance = w.DISTANCE;
+                if (distance) {
+                    if (w.UNIT !== goldenUnit) {
+                        distance = convertDistance(w.DISTANCE, w.UNIT, goldenUnit);
+                    }
+                    total += distance;
+                }
+            });
+            records.push({
+                DESCRIPTION: parseInt(total) + " " + goldenUnit,
+            });
+        }
+
+        // Max weight, per lift
+        if (activity === "lifting") {
+            _.each(_.groupBy(workouts, 'ACTIVITY'), function(workouts, lift) {
+                var max = workouts[0];
+                _.each(workouts, function(w) {
+                    if (w.WEIGHT > max.WEIGHT) {
+                        max = w;
+                    }
+                });
+                records.push({
+                    DESCRIPTION: lift + "@" + max.WEIGHT,
+                    DAY: max.DAY,
+                });
+            });
+        }
+
+        // Total count
+        records.push({
+            DESCRIPTION: daysByActivity[activity].length + " days",
+        });
+
+        console.log(activity + " => " + activityClass(activity));
+        list.innerHTML += template({
+            ACTIVITY: activity,
+            CLASS: activityClass(activity),
+            RECORDS: records,
+        });
+    });
+
+    // Add hover events to toggle record lists
+    _.each(document.querySelectorAll("#record-list > li"), function(li) {
+        li.addEventListener("mouseover", function(e) {
+            e.currentTarget.querySelector(".records").style.display = "block";
+        });
+        li.addEventListener("mouseout", function(e) {
+            e.currentTarget.querySelector(".records").style.display = "none";
+        });
+    });
+}
+
 function timeToString(time) {
     var hours = Math.floor(time / 3600);
     var minutes = Math.floor((time - hours * 3600) / 60);
@@ -218,4 +342,23 @@ function stringToTime(string) {
         factor *= 60;
     }
     return time;
+}
+
+var kmPerMile = 1.60934;
+var conversions = {
+    "mi": {
+        "km": kmPerMile,
+        "m": kmPerMile * 1000,
+    },
+    "km": {
+        "m": 1000,
+        "mi": 1 / kmPerMile,
+    },
+    "m": {
+        "km": 1 / 1000,
+        "mi": 1 / kmPerMile / 1000,
+    }
+};
+function convertDistance(distance, fromUnit, toUnit) {
+    return distance * conversions[fromUnit][toUnit];
 }

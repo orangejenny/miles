@@ -7,7 +7,7 @@ body {
 
 #calendar {
     text-align: center;
-    margin: @spacingWide 0;
+    margin: @spacingNormal 0;
 
     .day {
         fill: #fff;
@@ -25,19 +25,21 @@ body {
     }
 }
 
-#calendar .running { fill: lighten(green, 20%); }
-#calendar .erging { fill: lighten(orange, 20%); }
-#calendar .lifting { fill: lighten(purple, 20%); }
-#calendar .crossfit { fill: lighten(red, 20%); }
-#calendar .sculling { fill: lighten(aqua, 20%); }
-#calendar .swimming { fill: lighten(blue, 20%); }
-#calendar .other { fill: lighten(yellow, 20%); }
+#calendar .running { fill: @running; }
+#calendar .erging { fill: @erging; }
+#calendar .lifting { fill: @lifting; }
+#calendar .crossfit { fill: @crossfit; }
+#calendar .sculling { fill: @sculling; }
+#calendar .swimming { fill: @swimming; }
+#calendar .other { fill: @other; }
 
 #tooltip {
     position: absolute;
+    z-index: @zIndexTooltip;
     border: 1px solid #000;
     border-radius: 5px;
     background-color: #fff;
     padding: @spacingNarrow;
     opacity: 0.9;
+    max-width: 300px;
 }

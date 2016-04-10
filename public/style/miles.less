@@ -6,6 +6,7 @@
 
 body {
 	font-family: Georgia;
+    font-size: small;
     padding-top: 95px;
 }
 
@@ -98,7 +99,7 @@ ul {
 #new-day {
     position: fixed;
     top: 0;
-    margin: @spacingWide 25%;
+    margin: @spacingNormal 25%;
     width: 50%;
     z-index: @zIndexModal;
     background-color: white;
@@ -164,6 +165,58 @@ ul {
     }
 }
 
+#record-list {
+    position: relative;
+    text-align: center;
+    z-index: @zIndexRecordPopups;
+
+    > li {
+        text-align: left;
+        display: inline-block;
+        margin: 0 @spacingWide;
+        padding: 0;
+        position: relative;
+
+        .activity, .records {
+            background-color: white;
+            padding: @spacingNarrow;
+            border-style: solid;
+            border-width: 1px;
+            border-left-width: 10px;
+        }
+
+        .activity {
+            width: 100px;
+        }
+
+        .records {
+            min-width: 100px;
+            position: absolute;
+
+            li {
+                margin: 0;
+                padding: 0;
+
+                &:not(:last-child) {
+                    padding-bottom: @spacingWide;
+                }
+                
+                .description {
+                    white-space: nowrap;
+                }
+            }
+        }
+    }
+}
+
+#record-list .running { border-color: @running; }
+#record-list .erging { border-color: @erging; }
+#record-list .lifting { border-color: @lifting; }
+#record-list .crossfit { border-color: @crossfit; }
+#record-list .sculling { border-color: @sculling; }
+#record-list .swimming { border-color: @swimming; }
+#record-list .other { border-color: @other; }
+
 #day-list, .day-list-fade {
     width: 90%;
     margin: 0 5%;
@@ -183,7 +236,7 @@ ul {
 }
 
 #day-list, .day-list-fade.top {
-    top: 250px;
+    top: 275px;
 }
 
 #day-list, .day-list-fade.bottom {

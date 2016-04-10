@@ -90,11 +90,17 @@ function generateCalendar(json) {
 }
 
 function activityClass(data) {
-    if (!data || !data.WORKOUTS || !data.WORKOUTS.length) {
-        return "";
+    var activity;
+    if (_.isString(data)) {
+        activity = data;
+    } else if (data && data.WORKOUTS && data.WORKOUTS.length) {
+        activity = data.WORKOUTS[0].ACTIVITY;
+    } else {
+        return;
     }
-    var activity = data.WORKOUTS[0].ACTIVITY;
-    if (_.contains(["running", "erging", "crossfit", "sculling", "swimming"], activity)) {
+
+    var activity = _.isString(data) ? data : data.WORKOUTS[0].ACTIVITY;
+    if (_.contains(["running", "erging", "crossfit", "sculling", "swimming", "lifting"], activity)) {
         return activity;
     }
     if (_.contains(["squats", "cleans", "deadlifts", "bench press", "overhead press", "barbell rows"], activity)) {
@@ -134,6 +140,9 @@ function attachTooltip(selector) {
         var description = format(data.DATE);
         if (data.WORKOUTS) {
             description += "<br>" + _.map(data.WORKOUTS, function(w) { return serializeWorkout(w) }).join("<br>");
+        }
+        if (data.NOTES) {
+            description += "<br><br>" + data.NOTES;
         }
         tooltip.innerHTML = description;
         tooltip.classList.remove("hide");

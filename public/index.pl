@@ -91,6 +91,7 @@ print qq{
                 </fieldset>
             </form>
             <div id="calendar"></div>
+            <ul id="record-list"></ul>
             <ul id="day-list"></ul>
             <div class="day-list-fade top"></div>
             <div class="day-list-fade bottom"></div>
@@ -111,6 +112,22 @@ print qq{
                     <div class="notes">
                         <%= NOTES %>
                     </div>
+                </li>
+            </script>
+
+            <script type="text/template" name="record">
+                <li>
+                    <div class="activity <%= CLASS %>"><%= ACTIVITY %></div>
+                    <ul class="records hide <%= CLASS %>">
+                        <% _.each(RECORDS, function(r) { %>
+                            <li>
+                                <div class="description"><%= r.DESCRIPTION %></div>
+                                <% if (r.DAY) { %>
+                                    <div>(<%= r.DAY %>)</div>
+                                <% } %>
+                            </li>
+                        <% }) %>
+                    </ul>
                 </li>
             </script>
     
