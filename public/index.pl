@@ -108,7 +108,7 @@ print qq{
                         <%= DAY %>
                     </div>
                     <% if (WORKOUTS) { %>
-                        <ul class="workouts">
+                        <ul class="workouts <%= ACTIVITY_CLASS %>">
                             <% _.each(WORKOUTS, function(w) { %>
                                 <li><%= w.DESCRIPTION %></li>
                             <% }) %>

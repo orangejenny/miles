@@ -60,6 +60,17 @@
         .workouts {
             float: left;
             width: calc(~'50% - @{dayWidth}');
+            border-left-width: 5px;
+            border-left-style: solid;
+
+            // Color-code borders
+            &.running { border-left-color: @running; }
+            &.erging { border-left-color: @erging; }
+            &.lifting { border-left-color: @lifting; }
+            &.crossfit { border-left-color: @crossfit; }
+            &.sculling { border-left-color: @sculling; }
+            &.swimming { border-left-color: @swimming; }
+            &.other { border-left-color: @other; }
         }
 
         .notes {

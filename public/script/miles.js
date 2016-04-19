@@ -77,6 +77,7 @@ function generatePage(years) {
         }
 
         json = _.map(json, function(day) {
+            day.ACTIVITY_CLASS = activityClass(day);
             day.WORKOUTS = _.map(day.WORKOUTS, function(w) {
                 w.DESCRIPTION = serializeWorkout(w);
                 return w;
