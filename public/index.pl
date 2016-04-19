@@ -20,7 +20,7 @@ if ($fdat->{NEW} == 1) {
     my @workouts = ();
     while ($fdat->{"ACTIVITY" . scalar(@workouts)}) {
         my $workout = {};
-        foreach my $param (qw(ACTIVITY SETS REPS WEIGHT DISTANCE UNIT TIME SUCCESS)) {
+        foreach my $param (qw(ACTIVITY SETS REPS WEIGHT DISTANCE UNIT TIME)) {
             $workout->{$param} = $fdat->{$param . scalar(@workouts)};
         }
         if ($workout->{TIME}) {
@@ -31,9 +31,6 @@ if ($fdat->{NEW} == 1) {
                 $factor *= 60;
             }
             $workout->{TIME} = $time;
-        }
-        if ($workout->{SUCCESS}) {
-            $workout->{SUCCESS} = 1;
         }
         push(@workouts, $workout);
     }
@@ -163,7 +160,6 @@ print qq{
                             <input type="text" name="sets<%= index %>" placeholder="sets" />
                             <input type="text" name="reps<%= index %>" placeholder="reps" />
                             <input type="text" name="weight<%= index %>" placeholder="weight" />
-                            <input type="checkbox" name="success<%= index %>" checked />
                         </div>
                         <div class="input-row">
                             <input type="text" name="distance<%= index %>" placeholder="distance" />

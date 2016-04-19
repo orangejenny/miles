@@ -49,7 +49,7 @@ function generatePage(years) {
         buttonBar.appendChild(blankButton);
         while (index < json.length && _.keys(skeletons).length < 4) {
             var day = json[index];
-            var skeleton = _.map(day.WORKOUTS, function(w) { return serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME', 'SUCCESS'])); }).join("<br>");
+            var skeleton = _.map(day.WORKOUTS, function(w) { return serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME'])); }).join("<br>");
             if (!skeletons[skeleton]) {
                 skeletons[skeleton] = day.WORKOUTS;
                 var button = document.createElement("button");
@@ -126,9 +126,6 @@ function serializeWorkout(workout, excludeActivity) {
     }
     if (workout.WEIGHT) {
         text += " @ " + workout.WEIGHT + "lb";
-    }
-    if (!_.isUndefined(workout.SUCCESS) && !workout.SUCCESS) {
-        text += " (FAIL)";
     }
     text = text.trim();
     return text;
@@ -243,7 +240,6 @@ function renderRecords(allDays) {
                         WEIGHT: Number(w.WEIGHT),
                         TIME: Number(w.TIME),
                         DISTANCE: Number(w.DISTANCE),
-                        SUCCESS: !!w.SUCCESS,
                     });
                 });
             }));
