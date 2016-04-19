@@ -78,7 +78,7 @@ function generatePage(years) {
 
         json = _.map(json, function(day) {
             day.WORKOUTS = _.map(day.WORKOUTS, function(w) {
-                w.DESCRIPTION = serializeWorkout(w, true);
+                w.DESCRIPTION = serializeWorkout(w);
                 return w;
             });
             return day;
@@ -300,7 +300,7 @@ function renderRecords(allDays) {
                 }
             });
             records.push({
-                DESCRIPTION: parseInt(total) + " " + goldenUnit,
+                DESCRIPTION: parseInt(total) + " " + goldenUnit + " total",
             });
         }
 
