@@ -9,8 +9,13 @@ module.exports = function(grunt) {
 					yuicompress: true
 				},
 			files: {
-				"./style/miles.css": "./style/miles.less",
 				"./style/calendar.css": "./style/calendar.less",
+				"./style/days.css": "./style/days.less",
+				"./style/imports.css": "./style/imports.less",
+				"./style/index.css": "./style/index.less",
+				"./style/miles.css": "./style/miles.less",
+				"./style/legend.css": "./style/legend.less",
+				"./style/new-day.css": "./style/new-day.less",
 			}
 		}
 	},

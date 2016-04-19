@@ -1,0 +1,56 @@
+@import "imports.less";
+
+#legend {
+    // Position on page: below calendar, above day list
+    position: relative;
+    top: @newDayHeight;
+    text-align: center;
+    z-index: @zIndexRecordPopups;
+
+    > li {
+        text-align: left;
+        display: inline-block;
+        margin: 0 @spacingWide;
+        padding: 0;
+        position: relative;
+
+        .activity, .records {
+            background-color: white;
+            padding: @spacingNarrow;
+            border-style: solid;
+            border-width: 1px;
+            border-left-width: 10px;
+        }
+
+        .activity {
+            width: 100px;
+        }
+
+        .records {
+            min-width: 100px;
+            position: absolute;
+
+            li {
+                margin: 0;
+                padding: 0;
+
+                &:not(:last-child) {
+                    padding-bottom: @spacingWide;
+                }
+                
+                .description {
+                    white-space: nowrap;
+                }
+            }
+        }
+    }
+
+    // Color-code activities
+    .running { border-color: @running; }
+    .erging { border-color: @erging; }
+    .lifting { border-color: @lifting; }
+    .crossfit { border-color: @crossfit; }
+    .sculling { border-color: @sculling; }
+    .swimming { border-color: @swimming; }
+    .other { border-color: @other; }
+} 

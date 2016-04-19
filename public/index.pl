@@ -57,8 +57,7 @@ my $years = $fdat->{YEARS} || 1;
 print qq{
     <html>
     	<head>
-    		<link rel="stylesheet" type="text/css" href="style/miles.css"></link>
-    		<link rel="stylesheet" type="text/css" href="style/calendar.css"></link>
+    		<link rel="stylesheet" type="text/css" href="style/index.css"></link>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     		<script src="script/calendar.js"></script>
@@ -97,10 +96,10 @@ print qq{
                 </fieldset>
             </form>
             <div id="calendar"></div>
-            <ul id="record-list"></ul>
-            <ul id="day-list"></ul>
-            <div class="day-list-fade top"></div>
-            <div class="day-list-fade bottom"></div>
+            <ul id="legend"></ul>
+            <ul id="days"></ul>
+            <div class="days-fade top"></div>
+            <div class="days-fade bottom"></div>
             <div id="tooltip" class="hide"></div>
     
             <script type="text/template" name="day">

@@ -1,13 +1,16 @@
+// Spacing constants
 @borderRadius: 3px;
 @spacingWide: 20px;
 @spacingNormal: 10px;
 @spacingNarrow: 5px;
 
+// Master z-index scale
 @zIndexRecordPopups: 1;
 @zIndexTooltip: 2;
 @zIndexModalBackdrop: 3;
 @zIndexModal: 4;
 
+// Color-activity map
 @running: lighten(green, 20%);
 @erging: lighten(orange, 20%);
 @lifting: lighten(purple, 20%);
@@ -15,3 +18,32 @@
 @sculling: lighten(aqua, 20%);
 @swimming: lighten(blue, 20%);
 @other: lighten(yellow, 20%);
+
+// Heights for vertical positioning
+@newDayHeight: 105px;
+@calendarHeight: 144px;
+@legendHeight: 27px;
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
+.clearfix {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+.hide {
+    display: none;
+} 

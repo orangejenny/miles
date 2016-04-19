@@ -207,7 +207,7 @@ function cancelDay() {
 }
 
 function renderList(days) {
-    var list = document.getElementById("day-list"),
+    var list = document.getElementById("days"),
         template = document.querySelector("script[type='text/template'][name='day']");
     list.innerHTML = '';
     template = _.template(template.innerHTML);
@@ -217,7 +217,7 @@ function renderList(days) {
 }
 
 function renderRecords(allDays) {
-    var list = document.getElementById("record-list"),
+    var list = document.getElementById("legend"),
         template = document.querySelector("script[type='text/template'][name='record']");
 
     list.innerHTML = '';
@@ -329,7 +329,7 @@ function renderRecords(allDays) {
     });
 
     // Add hover events to toggle record lists
-    _.each(document.querySelectorAll("#record-list > li"), function(li) {
+    _.each(document.querySelectorAll("#legend > li"), function(li) {
         li.addEventListener("mouseover", function(e) {
             e.currentTarget.querySelector(".records").style.display = "block";
         });

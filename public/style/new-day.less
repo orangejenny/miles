@@ -1,0 +1,83 @@
+@import "imports.less";
+
+// Modal backdrop
+#new-day-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: black;
+    opacity: 0.5;
+    z-index: @zIndexModalBackdrop;
+}
+
+// Form for adding a new day
+#new-day {
+    position: fixed;
+    top: 0;
+    margin: @spacingNormal 25%;
+    width: 50%;
+    z-index: @zIndexModal;
+    background-color: white;
+    padding: @spacingNormal;
+    border-radius: @borderRadius;
+
+    input[type='text'], select {
+        width: 50px;
+        margin-right: @spacingNarrow;
+    }
+
+    .new-activity {
+        width: auto;
+    }
+
+    #pace {
+        margin-left: @spacingNarrow;
+    }
+
+    textarea {
+        width: 100%;
+    }
+
+    .activity {
+        margin-right: @spacingNormal;
+    }
+
+    .workouts {
+        .clearfix();
+        input[type='text'], select:not(.new-activity) {
+            width: 75px;
+        }
+
+        .workout-row {
+            margin: 0 0 @spacingNormal 0;
+            .clearfix();
+
+            .remove-workout {
+                display: none;
+            }
+
+            &:last-child:not(:first-child) {
+                .remove-workout {
+                    display: block;
+                }
+            }
+        }
+
+        .input-row {
+            .clearfix();
+        }
+    }
+
+    .input-row {
+        margin-bottom: @spacingNarrow;
+    }
+
+    .add-day {
+        button {
+            margin-right: @spacingNarrow;
+            margin-bottom: @spacingNarrow;
+        }
+    }
+}
