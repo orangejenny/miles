@@ -13,5 +13,7 @@ my $fdat = Miles::Fdat();
 
 print $cgi->header(-type => 'text/text');
 
-my @days = Miles::ListDays($dbh);
+my @days = Miles::ListDays($dbh, {
+    YEARS => $fdat->{YEARS},
+});
 print to_json(\@days);

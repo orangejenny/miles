@@ -1,18 +1,52 @@
 document.addEventListener('DOMContentLoaded', function() {
-    d3.json("data.pl", function(error, json) {
+    generatePage(1);
+
+    document.getElementById("add-workout").addEventListener("click", addBlankWorkout);
+
+    updateDayOfWeek();
+    _.each(document.querySelectorAll("#new-day legend input"), function(i) {
+        i.addEventListener("blur", updateDayOfWeek);
+    });
+
+    document.getElementById("cancel").addEventListener("click", cancelDay);
+    document.getElementById("new-day-backdrop").addEventListener("click", cancelDay);
+
+    var filterForm = document.getElementById("filter-years");
+    filterForm.querySelector("button").addEventListener("click", function() {
+        var input = filterForm.querySelector("input"),
+            years = parseInt(input.value);
+        if (!_.isNumber(years) || years <= 0) {
+            years = 1;
+            input.value = years;
+        }
+        generatePage(years);
+    });
+});
+
+function generatePage(years) {
+    var filterForm = document.getElementById("filter-years"),
+        filterSpinner = document.getElementById("filter-spinner");
+    filterForm.style.display = "none";
+    filterSpinner.style.display = "block";
+    d3.json("data.pl?years=" + years, function(error, json) {
         if (error) {
             throw error;
         }
 
-        var skeletons = {};
-        var index = 0;
-        var buttonBar = document.querySelector(".add-day");
-        buttonBar.querySelector("button").addEventListener("click", function() {
+        var skeletons = {},
+            index = 0,
+            buttonBar = document.querySelector(".add-day"),
+            blankButton = document.createElement("button");
+        blankButton.type = "button";
+        blankButton.innerHTML = "Blank Day";
+        blankButton.addEventListener("click", function() {
             addBlankWorkout();
             document.querySelector(".add-day").style.display = "none";
             document.querySelector(".not-legend").style.display = "block";
             document.querySelector("#new-day-backdrop").style.display = "block";
         });
+        buttonBar.innerHTML = '';
+        buttonBar.appendChild(blankButton);
         while (index < json.length && _.keys(skeletons).length < 4) {
             var day = json[index];
             var skeleton = _.map(day.WORKOUTS, function(w) { return serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME', 'SUCCESS'])); }).join("<br>");
@@ -49,21 +83,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             return day;
         });
-        generateList(json);
-        generateRecords(json);
-        generateCalendar(json);
+        renderList(json);
+        renderRecords(json);
+        renderCalendar(json);
+
+        filterForm.style.display = "block";
+        filterSpinner.style.display = "none";
     });
-
-    document.getElementById("add-workout").addEventListener("click", addBlankWorkout);
-
-    updateDayOfWeek();
-    _.each(document.querySelectorAll("#new-day legend input"), function(i) {
-        i.addEventListener("blur", updateDayOfWeek);
-    });
-
-    document.getElementById("cancel").addEventListener("click", cancelDay);
-    document.getElementById("new-day-backdrop").addEventListener("click", cancelDay);
-});
+}
 
 function closest(element, lambda) {
     var closest = element;
@@ -182,18 +209,21 @@ function cancelDay() {
     document.querySelector("#new-day .workouts").innerHTML = "";
 }
 
-function generateList(days) {
-    var list = document.getElementById("day-list");
-    var template = document.querySelector("script[type='text/template'][name='day']");
+function renderList(days) {
+    var list = document.getElementById("day-list"),
+        template = document.querySelector("script[type='text/template'][name='day']");
+    list.innerHTML = '';
     template = _.template(template.innerHTML);
     for (var i = 0; i < days.length; i++) {
         list.innerHTML += template(days[i]);
     }
 }
 
-function generateRecords(allDays) {
-    var list = document.getElementById("record-list");
-    var template = document.querySelector("script[type='text/template'][name='record']");
+function renderRecords(allDays) {
+    var list = document.getElementById("record-list"),
+        template = document.querySelector("script[type='text/template'][name='record']");
+
+    list.innerHTML = '';
     template = _.template(template.innerHTML);
 
     var daysByActivity = _.groupBy(allDays, activityClass),
@@ -295,7 +325,6 @@ function generateRecords(allDays) {
             DESCRIPTION: daysByActivity[activity].length + " days",
         });
 
-        console.log(activity + " => " + activityClass(activity));
         list.innerHTML += template({
             ACTIVITY: activity,
             CLASS: activityClass(activity),

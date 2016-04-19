@@ -79,10 +79,15 @@ sub AddDay {
 #
 # Description: Fetch a range of days, along with their workouts
 #
+# Parameters:
+#   YEARS: Number of years back to go (defaults to 1)
+#
 # Return Value: Array or arrayref of hashrefs
 ################################################################
 sub ListDays {
     my ($dbh, $args) = @_;
+
+    $args->{YEARS} ||= 1;
 
     my @rows = Miles::Results($dbh, {
         SQL => qq{
@@ -94,14 +99,14 @@ sub ListDays {
             where
                 days.id = workouts.day_id
                 and days.day > concat(
-                    extract(year from subdate(now(), interval 1 year)), '-',
-                    extract(month from subdate(now(), interval 1 year)), '-01'
+                    extract(year from subdate(now(), interval ? year)), '-',
+                    extract(month from subdate(now(), interval ? year)), '-01'
                 )
                 and days.user = ?
             order by
                 days.day desc, days.id
         },
-        BINDS => [$USERNAME],
+        BINDS => [$args->{YEARS}, $args->{YEARS}, $USERNAME],
         COLUMNS => [qw(id day notes workoutid activity time distance sets reps weight unit success)],
     });
     

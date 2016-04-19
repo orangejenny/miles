@@ -7,7 +7,11 @@ body {
 
 #calendar {
     text-align: center;
-    margin: @spacingNormal 0;
+    padding: @spacingNormal 0;
+    white-space: nowrap;
+    overflow-x: scroll;
+    position: relative;
+    top: 65px;
 
     .day {
         fill: #fff;

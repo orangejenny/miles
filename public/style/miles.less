@@ -7,7 +7,6 @@
 body {
 	font-family: Georgia;
     font-size: small;
-    padding-top: 95px;
 }
 
 input[type="text"], select, button, textarea {
@@ -85,6 +84,10 @@ ul {
     padding: @spacingNormal;
 }
 
+#filter-years, #filter-spinner {
+    text-align: right;
+}
+
 #new-day-backdrop {
     position: fixed;
     top: 0;
@@ -96,7 +99,7 @@ ul {
     z-index: @zIndexModalBackdrop;
 }
 
-#new-day {
+#new-day fieldset {
     position: fixed;
     top: 0;
     margin: @spacingNormal 25%;
@@ -167,6 +170,7 @@ ul {
 
 #record-list {
     position: relative;
+    top: 65px;
     text-align: center;
     z-index: @zIndexRecordPopups;
 
@@ -236,7 +240,7 @@ ul {
 }
 
 #day-list, .day-list-fade.top {
-    top: 275px;
+    top: 295px;
 }
 
 #day-list, .day-list-fade.bottom {

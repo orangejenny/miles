@@ -4,12 +4,14 @@
 
 var format = d3.time.format("%Y-%m-%d");
 
-function generateCalendar(json) {
+function renderCalendar(json) {
     var minDataDate = new Date(d3.min(json, function(d) { return d.DAY; })),
         maxDataDate = new Date(d3.max(json, function(d) { return d.DAY; })),
         // Display the full month around the min and max dates returned by data
         minDate = new Date(minDataDate.getFullYear(), minDataDate.getMonth(), 1),
         maxDate = new Date(maxDataDate.getFullYear(), maxDataDate.getMonth() + 1, 1);
+
+    document.getElementById("calendar").innerHTML = "";
 
     var svg = d3.select("#calendar").selectAll("svg")
         .data(d3.range(minDate.getFullYear(), maxDate.getFullYear() + 1))
@@ -87,6 +89,9 @@ function generateCalendar(json) {
         .attr("d", function(d) { return monthPath(d, minDate); });
     
     attachTooltip("#calendar g rect");
+
+    var calendar = document.getElementById("calendar");
+    calendar.scrollLeft = calendar.scrollWidth - calendar.offsetWidth;
 }
 
 function activityClass(data) {

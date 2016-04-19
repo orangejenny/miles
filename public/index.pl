@@ -55,6 +55,8 @@ $day = $fdat->{DAY} || $day;
 $month = $fdat->{MONTH} || $month + 1;
 $year = $fdat->{YEAR} || $year + 1900;
 
+my $years = $fdat->{YEARS} || 1;
+
 print qq{
     <html>
     	<head>
@@ -68,6 +70,13 @@ print qq{
     	</head>
     	<body>
             $error
+            <div id="filter-years">
+                <input type="text" value="$years" size="1" maxlength="2" />
+                <button>years</button>
+            </div>
+            <div id="filter-spinner" class="hide">
+                <img src="images/spinner.gif" />
+            </div>
             <div id="new-day-backdrop" class="hide"></div>
             <form id="new-day" method="POST">
                 <fieldset>
@@ -87,7 +96,7 @@ print qq{
                         <button type="submit" class="primary">Save</button>
                         <button type="button" id="cancel">Cancel</button>
                     </div>
-                    <div class="add-day"><button type="button">Blank Day</button></div>
+                    <div class="add-day"></div>
                 </fieldset>
             </form>
             <div id="calendar"></div>
@@ -136,7 +145,6 @@ print qq{
                     <button type="button" class="pull-right remove-workout">Remove workout</button>
                     <div class="pull-left">
                         <select class="new-activity" name="activity<%= index %>">
-                            <!-- TODO: pull from data -->
                             <option>running</option>
                             <option>bench press</option>
                             <option>chinups</option>
