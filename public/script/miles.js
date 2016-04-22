@@ -1,4 +1,15 @@
-document.addEventListener('DOMContentLoaded', function() {
+requirejs([
+    './calendar',
+    './js',
+    './pace',
+    './utils',
+], function(
+    calendar,
+    js,
+    pace,
+    utils,
+undefined) {
+
     generatePage(1);
 
     document.getElementById("add-workout").addEventListener("click", addBlankWorkout);
@@ -21,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         generatePage(years);
     });
-});
 
 function generatePage(years) {
     var filterForm = document.getElementById("filter-years"),
@@ -49,7 +59,7 @@ function generatePage(years) {
         buttonBar.appendChild(blankButton);
         while (index < json.length && _.keys(skeletons).length < 4) {
             var day = json[index];
-            var skeleton = _.map(day.WORKOUTS, function(w) { return serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME'])); }).join("<br>");
+            var skeleton = _.map(day.WORKOUTS, function(w) { return utils.serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME'])); }).join("<br>");
             if (!skeletons[skeleton]) {
                 skeletons[skeleton] = day.WORKOUTS;
                 var button = document.createElement("button");
@@ -77,91 +87,34 @@ function generatePage(years) {
         }
 
         json = _.map(json, function(day) {
-            day.ACTIVITY_CLASS = activityClass(day);
+            day.ACTIVITY_CLASS = utils.activityClass(day);
             day.WORKOUTS = _.map(day.WORKOUTS, function(w) {
-                w.DESCRIPTION = serializeWorkout(w);
+                w.DESCRIPTION = utils.serializeWorkout(w);
                 return w;
             });
             return day;
         });
         renderList(json);
         renderRecords(json);
-        renderCalendar(json);
+        calendar.renderCalendar(json);
 
         filterForm.style.display = "block";
         filterSpinner.style.display = "none";
     });
 }
 
-function closest(element, lambda) {
-    var closest = element;
-    while (closest && !lambda.call(null, closest)) {
-        closest = closest.parentElement;
-    }
-    return closest;
-}
-
-function serializeWorkout(workout, excludeActivity) {
-    var text = excludeActivity ? '' : workout.ACTIVITY;
-    if (workout.SETS) {
-        text += " " + workout.SETS + " x";
-    }
-    if (workout.REPS) {
-        text += " " + workout.REPS;
-        if (workout.DISTANCE || workout.TIME) {
-            text += " x";
-        }
-    }
-    if (workout.DISTANCE) {
-        text += " " + workout.DISTANCE + " " + workout.UNIT;
-        if (workout.TIME) {
-            text += " in"
-        }
-    }
-    if (workout.TIME) {
-        text += " " + timeToString(workout.TIME);
-        var pace = getPace(workout);
-        if (pace) {
-            text += " (" + pace + ")";
-        }
-    }
-    if (workout.WEIGHT) {
-        text += " @ " + workout.WEIGHT + "lb";
-    }
-    text = text.trim();
-    return text;
-}
-
-function getPace(workout) {
-    if (workout.TIME && workout.DISTANCE) {
-        var pace = workout.TIME / workout.DISTANCE;
-        if (workout.ACTIVITY === "erging") {
-            // Paces for m workouts are given in km
-            if (workout.UNIT === "m") {
-                pace = pace * 1000;
-            }
-            // Paces for ergs are per 500m, not 1k
-            if (workout.UNIT === "km" || workout.UNIT === "m") {
-                pace = pace / 2;
-            }
-        }
-        return timeToString(pace);
-    }
-    return "";
-}
-
 function updatePace(input) {
-    parent = closest(input, function(e) { return e.classList.contains("workout-row"); });
-    parent.querySelector(".pace").innerHTML = getPace({
+    parent = js.closest(input, function(e) { return e.classList.contains("workout-row"); });
+    parent.querySelector(".pace").innerHTML = pace.getPace({
         ACTIVITY: parent.querySelector("select[name^='activity'] option:checked").value,
-        TIME: stringToTime(parent.querySelector("input[name^='time']").value),
+        TIME: pace.stringToTime(parent.querySelector("input[name^='time']").value),
         DISTANCE: parent.querySelector("input[name^='distance']").value,
         UNIT: parent.querySelector("select[name^='unit'] option:checked").value,
     });
 }
 
-var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 function updateDayOfWeek() {
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     var inputs = document.querySelectorAll("#new-day legend input");
     var values = {};
     var day = "";
@@ -193,7 +146,7 @@ function addBlankWorkout() {
     });
 
     div.querySelector(".remove-workout").addEventListener("click", function() {
-        var workout = closest(this, function(e) { return e.classList.contains("workout-row"); });
+        var workout = js.closest(this, function(e) { return e.classList.contains("workout-row"); });
         workout.parentElement.removeChild(workout);
     });
 
@@ -224,7 +177,7 @@ function renderRecords(allDays) {
     list.innerHTML = '';
     template = _.template(template.innerHTML);
 
-    var daysByActivity = _.groupBy(allDays, activityClass),
+    var daysByActivity = _.groupBy(allDays, utils.activityClass),
         sortedActivities = _.sortBy(_.keys(daysByActivity), function(activity) {
             return -1 * daysByActivity[activity].length;
         });
@@ -276,7 +229,7 @@ function renderRecords(allDays) {
                         }
                     });
                     records.push({
-                        DESCRIPTION: serializeWorkout(min, true),
+                        DESCRIPTION: utils.serializeWorkout(min, true),
                         DAY: min.DAY,
                     });
                 }
@@ -324,7 +277,7 @@ function renderRecords(allDays) {
 
         list.innerHTML += template({
             ACTIVITY: activity,
-            CLASS: activityClass(activity),
+            CLASS: utils.activityClass(activity),
             RECORDS: records,
         });
     });
@@ -338,36 +291,6 @@ function renderRecords(allDays) {
             e.currentTarget.querySelector(".records").style.display = "none";
         });
     });
-}
-
-function timeToString(time) {
-    var hours = Math.floor(time / 3600);
-    var minutes = Math.floor((time - hours * 3600) / 60);
-    var seconds = time % 60;
-    var text = "";
-    if (hours > 0) {
-        text += hours + ":" 
-        if (minutes < 10) {
-            text += "0";
-        }
-    }
-    text += minutes + ":";
-    if (seconds < 10) {
-        text += "0" 
-    }
-    text += Math.round(seconds * 10) / 10;  // at most one decimal
-    return text;
-}
-
-function stringToTime(string) {
-    var time = 0;
-    var factor = 1;
-    var pieces = string.split(":");
-    for (var i = pieces.length - 1; i >= 0; i--) {
-        time += pieces[i] * factor;
-        factor *= 60;
-    }
-    return time;
 }
 
 var kmPerMile = 1.60934;
@@ -388,3 +311,5 @@ var conversions = {
 function convertDistance(distance, fromUnit, toUnit) {
     return distance * conversions[fromUnit][toUnit];
 }
+
+});

@@ -1,10 +1,14 @@
+define(function(require) {
+
+    var utils = require('./utils');
+
 // Adapted from http://bl.ocks.org/mbostock/4063318
     var cellSize = 17,
         height = cellSize * 7 + 5;  // offset to account for month path width plus vertical margin between years
 
 var format = d3.time.format("%Y-%m-%d");
 
-function renderCalendar(json) {
+var renderCalendar = function(json) {
     var minDataDate = new Date(d3.min(json, function(d) { return d.DAY; })),
         maxDataDate = new Date(d3.max(json, function(d) { return d.DAY; })),
         // Display the full month around the min and max dates returned by data
@@ -70,7 +74,7 @@ function renderCalendar(json) {
         });
 
     // Color in days, based on activity
-    rect.attr("class", function(d) { return "day " + activityClass(d); })
+    rect.attr("class", function(d) { return "day " + utils.activityClass(d); })
         .select("title")
         .text(function(d) { return d + ": " + d.ACTIVITY; });
     
@@ -92,29 +96,6 @@ function renderCalendar(json) {
 
     var calendar = document.getElementById("calendar");
     calendar.scrollLeft = calendar.scrollWidth - calendar.offsetWidth;
-}
-
-function activityClass(data) {
-    var activity;
-    if (_.isString(data)) {
-        activity = data;
-    } else if (data && data.WORKOUTS && data.WORKOUTS.length) {
-        activity = data.WORKOUTS[0].ACTIVITY;
-    } else {
-        return;
-    }
-
-    var activity = _.isString(data) ? data : data.WORKOUTS[0].ACTIVITY;
-    if (_.contains(["running", "erging", "crossfit", "sculling", "swimming", "lifting"], activity)) {
-        return activity;
-    }
-    if (_.contains(["squats", "cleans", "deadlifts", "bench press", "overhead press", "barbell rows"], activity)) {
-        return "lifting";
-    }
-    if (activity === "treadmill") {
-        return "running";
-    }
-    return "other";
 }
 
 function monthPath(t0, min) {
@@ -144,7 +125,7 @@ function attachTooltip(selector) {
         var tooltip = document.getElementById("tooltip");
         var description = format(data.DATE);
         if (data.WORKOUTS) {
-            description += "<br>" + _.map(data.WORKOUTS, function(w) { return serializeWorkout(w) }).join("<br>");
+            description += "<br>" + _.map(data.WORKOUTS, function(w) { return utils.serializeWorkout(w) }).join("<br>");
         }
         if (data.NOTES) {
             description += "<br><br>" + data.NOTES;
@@ -160,3 +141,8 @@ function attachTooltip(selector) {
         positionTooltip();
     });
 }
+
+    return {
+        renderCalendar: renderCalendar,
+    };
+});
