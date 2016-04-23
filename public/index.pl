@@ -58,7 +58,7 @@ print qq{
     <html>
     	<head>
     		<link rel="stylesheet" type="text/css" href="style/index.css"></link>
-            <script data-main="script/main" src="script/require.min.js"></script>
+            <script data-main="script/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
             <title>Miles</title>
     	</head>
     	<body>
