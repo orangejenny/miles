@@ -1,4 +1,28 @@
+/*
+    Utility functions related to time and distance.
+*/
 define(function() {
+    var kmPerMile = 1.60934;
+
+    var conversions = {
+        "mi": {
+            "km": kmPerMile,
+            "m": kmPerMile * 1000,
+        },
+        "km": {
+            "m": 1000,
+            "mi": 1 / kmPerMile,
+        },
+        "m": {
+            "km": 1 / 1000,
+            "mi": 1 / kmPerMile / 1000,
+        }
+    };
+
+    var convertDistance = function(distance, fromUnit, toUnit) {
+        return distance * conversions[fromUnit][toUnit];
+    }
+
     var getPace = function(workout) {
         if (workout.TIME && workout.DISTANCE) {
             var pace = workout.TIME / workout.DISTANCE;
@@ -48,6 +72,7 @@ define(function() {
     };
 
     return {
+        convertDistance: convertDistance,
         getPace: getPace,
         stringToTime: stringToTime,
         timeToString: timeToString,

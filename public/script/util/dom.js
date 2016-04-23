@@ -1,3 +1,6 @@
+/*
+    Convenience functions for manipulating DOM elements.
+*/
 define(function() {
     return {
         closest: function(element, lambda) {

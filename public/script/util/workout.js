@@ -1,3 +1,6 @@
+/*
+    Utility functions related to workouts.
+*/
 define([
     "underscore",
 ], function(
