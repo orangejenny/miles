@@ -58,10 +58,7 @@ print qq{
     <html>
     	<head>
     		<link rel="stylesheet" type="text/css" href="style/index.css"></link>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-    		<script src="script/calendar.js"></script>
-    		<script src="script/miles.js"></script>
+            <script data-main="script/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
             <title>Miles</title>
     	</head>
     	<body>
