@@ -3,20 +3,22 @@
 */
 define([
     "underscore",
+    "text!template/new_workout.html",
     "util/dom",
     "util/pace",
     "util/workout",
 ], function(
     _,
+    new_workout,
     dom,
     pace,
     workout,
 undefined) {
     var addBlankWorkout = function() {
-        var index = document.querySelectorAll("#new-day .workouts .workout-row").length;
-        var workoutTemplate = document.querySelector("script[type='text/template'][name='blank-workout']");
-        workoutTemplate = _.template(workoutTemplate.innerHTML);
-        var div = document.createElement("div");
+        var index = document.querySelectorAll("#new-day .workouts .workout-row").length,
+            workoutTemplate = _.template(new_workout),
+            div = document.createElement("div");
+
         div.innerHTML = workoutTemplate({ index: index });
         // TODO: deal with this. note that this will not add any text nodes
         _.each(div.children, function(child) {

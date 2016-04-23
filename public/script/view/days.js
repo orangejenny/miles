@@ -3,14 +3,15 @@
 */
 define([
     "underscore",
+    "text!template/day.html",
 ], function(
     _,
+    day,
 undefined) {
     var render = function(json) {
         var list = document.getElementById("days"),
-            template = document.querySelector("script[type='text/template'][name='day']");
+            template = _.template(day);
         list.innerHTML = '';
-        template = _.template(template.innerHTML);
         for (var i = 0; i < json.length; i++) {
             list.innerHTML += template(json[i]);
         }

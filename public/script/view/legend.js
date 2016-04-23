@@ -1,19 +1,19 @@
 define([
     "underscore",
+    "text!template/record.html",
     "util/pace",
     "util/workout",
 ], function(
     _,
+    record,
     pace,
     workout,
 undefined) {
     var render = function(allDays) {
         var list = document.getElementById("legend"),
-            template = document.querySelector("script[type='text/template'][name='record']");
+            template = _.template(record);
     
         list.innerHTML = '';
-        template = _.template(template.innerHTML);
-    
         var daysByActivity = _.groupBy(allDays, workout.activityClass),
             sortedActivities = _.sortBy(_.keys(daysByActivity), function(activity) {
                 return -1 * daysByActivity[activity].length;

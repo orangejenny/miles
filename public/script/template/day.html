@@ -1,0 +1,15 @@
+<li>
+    <div class="day">
+        <%= DAY %>
+    </div>
+    <% if (WORKOUTS) { %>
+        <ul class="workouts <%= ACTIVITY_CLASS %>">
+            <% _.each(WORKOUTS, function(w) { %>
+                <li><%= w.DESCRIPTION %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+    <div class="notes">
+        <%= NOTES %>
+    </div>
+</li>

@@ -1,0 +1,35 @@
+<div class="workout-row">
+    <button type="button" class="pull-right remove-workout">Remove workout</button>
+    <div class="pull-left">
+        <select class="new-activity" name="activity<%= index %>">
+            <option>running</option>
+            <option>bench press</option>
+            <option>chinups</option>
+            <option>cleans</option>
+            <option>crossfit</option>
+            <option>curls</option>
+            <option>deadlifts</option>
+            <option>erging</option>
+            <option>overhead press</option>
+            <option>squats</option>
+            <option>circuits</option>
+        </select>
+    </div>
+    <div class="pull-left">
+        <div class="input-row">
+            <input type="text" name="sets<%= index %>" placeholder="sets" />
+            <input type="text" name="reps<%= index %>" placeholder="reps" />
+            <input type="text" name="weight<%= index %>" placeholder="weight" />
+        </div>
+        <div class="input-row">
+            <input type="text" name="distance<%= index %>" placeholder="distance" />
+            <select name="unit<%= index %>">
+                <option>mi</option>
+                <option>km</option>
+                <option>m</option>
+            </select>
+            <input type="text" name="time<%= index %>" placeholder="time" />
+            <span class="pace"></span>
+        </div>
+    </div>
+</div>

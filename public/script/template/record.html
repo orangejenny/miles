@@ -1,0 +1,13 @@
+<li>
+    <div class="activity <%= CLASS %>"><%= ACTIVITY %></div>
+    <ul class="records hide <%= CLASS %>">
+        <% _.each(RECORDS, function(r) { %>
+            <li>
+                <div class="description"><%= r.DESCRIPTION %></div>
+                <% if (r.DAY) { %>
+                    <div>(<%= r.DAY %>)</div>
+                <% } %>
+            </li>
+        <% }) %>
+    </ul>
+</li>
