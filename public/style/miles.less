@@ -50,15 +50,29 @@ ul {
     padding: 0;
 }
 
+#modal-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: black;
+    opacity: 0.5;
+    z-index: @zIndexModalBackdrop;
+}
+
 // Page-level error
 #error {
-    text-align: center;
-    margin: @spacingWide auto;
     background-color: lighten(pink, 10%);
     color: darken(red, 10%);
     border: 1px solid darken(red, 10%);
     border-radius: @borderRadius;
     padding: @spacingNormal;
+    position: absolute;
+    top: @spacingWide;
+    left: @spacingWide;
+    right: @spacingWide;
+    z-index: @zIndexModal;
 }
 
 #filter-years, #filter-spinner {
