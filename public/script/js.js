@@ -1,4 +1,4 @@
-define(function(require) {
+define(function() {
     return {
         closest: function(element, lambda) {
             var closest = element;

@@ -1,4 +1,8 @@
-define(function(require) {
+define([
+    "underscore",
+], function(
+    _,
+undefined) {
     var activityClass = function(data) {
         var activity;
         if (_.isString(data)) {

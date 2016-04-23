@@ -1,6 +1,12 @@
-define(function(require) {
-
-    var utils = require('./utils');
+define([
+    "underscore",
+    "d3",
+    "./utils",
+], function(
+    _,
+    d3,
+    utils,
+undefined) {
 
 // Adapted from http://bl.ocks.org/mbostock/4063318
     var cellSize = 17,

@@ -1,9 +1,13 @@
 requirejs([
+    'underscore',
+    'd3',
     './calendar',
     './js',
     './pace',
     './utils',
 ], function(
+    _,
+    d3,
     calendar,
     js,
     pace,
