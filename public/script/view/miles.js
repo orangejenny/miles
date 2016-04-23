@@ -5,25 +5,21 @@ requirejs([
     'underscore',
     'd3',
     'view/calendar',
+    'view/days',
     'view/legend',
     'view/new_day',
-    'util/dom',
-    'util/pace',
     'util/workout',
 ], function(
     _,
     d3,
     calendar,
+    days,
     legend,
     new_day,
-    dom,
-    pace,
     workout,
 undefined) {
     // Render initial page: display past year
     generatePage(1);
-
-    new_day.attachListeners();
 
     // Attach listener for filtering amount of data displayed
     var filterForm = document.getElementById("filter-years");
@@ -47,48 +43,8 @@ undefined) {
                 throw error;
             }
     
-            var skeletons = {},
-                index = 0,
-                buttonBar = document.querySelector(".add-day"),
-                blankButton = document.createElement("button");
-            blankButton.type = "button";
-            blankButton.innerHTML = "Blank Day";
-            blankButton.addEventListener("click", function() {
-                new_day.addBlankWorkout();
-                document.querySelector(".add-day").style.display = "none";
-                document.querySelector(".not-legend").style.display = "block";
-                document.querySelector("#new-day-backdrop").style.display = "block";
-            });
-            buttonBar.innerHTML = '';
-            buttonBar.appendChild(blankButton);
-            while (index < json.length && _.keys(skeletons).length < 4) {
-                var day = json[index];
-                var skeleton = _.map(day.WORKOUTS, function(w) { return workout.serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME'])); }).join("<br>");
-                if (!skeletons[skeleton]) {
-                    skeletons[skeleton] = day.WORKOUTS;
-                    var button = document.createElement("button");
-                    button.type = "button";
-                    button.innerHTML = skeleton;
-                    button.setAttribute("data-workouts", JSON.stringify(day.WORKOUTS));
-                    button.addEventListener("click", function() {
-                        var workouts = this.getAttribute("data-workouts");
-                        workouts = JSON.parse(workouts);
-                        _.each(workouts, function(workout, index) {
-                            var workoutDiv = new_day.addBlankWorkout();
-                            _.each(['activity', 'unit', 'sets', 'reps', 'weight', 'distance'], function(name) {
-                                if (workout[name.toUpperCase()]) {
-                                    workoutDiv.querySelector("[name^='" + name + "']").value = workout[name.toUpperCase()] || "";
-                                }
-                            });
-                        });
-                        document.querySelector(".add-day").style.display = "none";
-                        document.querySelector(".not-legend").style.display = "block";
-                        document.querySelector("#new-day-backdrop").style.display = "block";
-                    });
-                    buttonBar.appendChild(button);
-                }
-                index++;
-            }
+            // TODO: make new_day.render accept post-processed json instead of pre-processed?
+            new_day.render(json);
     
             json = _.map(json, function(day) {
                 day.ACTIVITY_CLASS = workout.activityClass(day);
@@ -98,23 +54,12 @@ undefined) {
                 });
                 return day;
             });
-            renderList(json);
-            legend.renderLegend(json);
-            calendar.renderCalendar(json);
+            days.render(json);
+            legend.render(json);
+            calendar.render(json);
     
             filterForm.style.display = "block";
             filterSpinner.style.display = "none";
         });
-    }
-    
-    // Display list of days
-    function renderList(days) {
-        var list = document.getElementById("days"),
-            template = document.querySelector("script[type='text/template'][name='day']");
-        list.innerHTML = '';
-        template = _.template(template.innerHTML);
-        for (var i = 0; i < days.length; i++) {
-            list.innerHTML += template(days[i]);
-        }
     }
 });

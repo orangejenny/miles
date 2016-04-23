@@ -16,7 +16,7 @@ undefined) {
         height = cellSize * 7 + 5,  // offset to account for month path width plus vertical margin between years
         format = d3.time.format("%Y-%m-%d");
 
-    var renderCalendar = function(json) {
+    var render = function(json) {
         var minDataDate = new Date(d3.min(json, function(d) { return d.DAY; })),
             maxDataDate = new Date(d3.max(json, function(d) { return d.DAY; })),
             // Display the full month around the min and max dates returned by data
@@ -151,6 +151,6 @@ undefined) {
     };
 
     return {
-        renderCalendar: renderCalendar,
+        render: render,
     };
 });

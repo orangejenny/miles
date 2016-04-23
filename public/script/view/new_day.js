@@ -1,12 +1,13 @@
+/*
+    View of form to add new day, including some number of workouts.
+*/
 define([
     "underscore",
-    "d3",
     "util/dom",
     "util/pace",
     "util/workout",
 ], function(
     _,
-    d3,
     dom,
     pace,
     workout,
@@ -78,8 +79,55 @@ undefined) {
         });
     };
 
+    var render = function(json) {
+        var buttonBar = document.querySelector(".add-day"),
+            blankButton = document.createElement("button");
+        blankButton.type = "button";
+        blankButton.innerHTML = "Blank Day";
+        blankButton.addEventListener("click", function() {
+            addBlankWorkout();
+            document.querySelector(".add-day").style.display = "none";
+            document.querySelector(".not-legend").style.display = "block";
+            document.querySelector("#new-day-backdrop").style.display = "block";
+        });
+        buttonBar.innerHTML = '';
+        buttonBar.appendChild(blankButton);
+
+        var skeletons = {},
+            index = 0;
+        while (index < json.length && _.keys(skeletons).length < 4) {
+            var day = json[index];
+            var skeleton = _.map(day.WORKOUTS, function(w) { return workout.serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME'])); }).join("<br>");
+            if (!skeletons[skeleton]) {
+                skeletons[skeleton] = day.WORKOUTS;
+                var button = document.createElement("button");
+                button.type = "button";
+                button.innerHTML = skeleton;
+                button.setAttribute("data-workouts", JSON.stringify(day.WORKOUTS));
+                button.addEventListener("click", function() {
+                    var workouts = this.getAttribute("data-workouts");
+                    workouts = JSON.parse(workouts);
+                    _.each(workouts, function(workout, index) {
+                        var workoutDiv = addBlankWorkout();
+                        _.each(['activity', 'unit', 'sets', 'reps', 'weight', 'distance'], function(name) {
+                            if (workout[name.toUpperCase()]) {
+                                workoutDiv.querySelector("[name^='" + name + "']").value = workout[name.toUpperCase()] || "";
+                            }
+                        });
+                    });
+                    document.querySelector(".add-day").style.display = "none";
+                    document.querySelector(".not-legend").style.display = "block";
+                    document.querySelector("#new-day-backdrop").style.display = "block";
+                });
+                buttonBar.appendChild(button);
+            }
+            index++;
+        }
+
+        attachListeners();
+    };
+
     return {
-        addBlankWorkout: addBlankWorkout,
-        attachListeners: attachListeners,
+        render: render,
     };
 });

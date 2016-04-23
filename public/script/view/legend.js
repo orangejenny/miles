@@ -1,13 +1,13 @@
 define([
     "underscore",
-    "d3",
+    "util/pace",
     "util/workout",
 ], function(
     _,
-    d3,
+    pace,
     workout,
 undefined) {
-    var renderLegend = function(allDays) {
+    var render = function(allDays) {
         var list = document.getElementById("legend"),
             template = document.querySelector("script[type='text/template'][name='record']");
     
@@ -131,6 +131,6 @@ undefined) {
     };
 
     return {
-        renderLegend: renderLegend,
+        render: render,
     };
 });
