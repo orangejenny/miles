@@ -6,4 +6,4 @@ requirejs.config({
     },
 });
 
-requirejs(["miles"]);
+requirejs(["view/miles"]);

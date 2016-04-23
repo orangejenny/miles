@@ -27,7 +27,7 @@ undefined) {
     };
 
     var serializeWorkout = function(workout, excludeActivity) {
-        var pace = require('./pace'),
+        var pace = require('util/pace'),
             text = excludeActivity ? '' : workout.ACTIVITY;
         if (workout.SETS) {
             text += " " + workout.SETS + " x";

@@ -1,17 +1,17 @@
 requirejs([
     'underscore',
     'd3',
-    './calendar',
-    './js',
-    './pace',
-    './utils',
+    'view/calendar',
+    'util/js',
+    'util/pace',
+    'util/workout',
 ], function(
     _,
     d3,
     calendar,
     js,
     pace,
-    utils,
+    workout,
 undefined) {
 
     generatePage(1);
@@ -63,7 +63,7 @@ function generatePage(years) {
         buttonBar.appendChild(blankButton);
         while (index < json.length && _.keys(skeletons).length < 4) {
             var day = json[index];
-            var skeleton = _.map(day.WORKOUTS, function(w) { return utils.serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME'])); }).join("<br>");
+            var skeleton = _.map(day.WORKOUTS, function(w) { return workout.serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME'])); }).join("<br>");
             if (!skeletons[skeleton]) {
                 skeletons[skeleton] = day.WORKOUTS;
                 var button = document.createElement("button");
@@ -91,9 +91,9 @@ function generatePage(years) {
         }
 
         json = _.map(json, function(day) {
-            day.ACTIVITY_CLASS = utils.activityClass(day);
+            day.ACTIVITY_CLASS = workout.activityClass(day);
             day.WORKOUTS = _.map(day.WORKOUTS, function(w) {
-                w.DESCRIPTION = utils.serializeWorkout(w);
+                w.DESCRIPTION = workout.serializeWorkout(w);
                 return w;
             });
             return day;
@@ -181,7 +181,7 @@ function renderRecords(allDays) {
     list.innerHTML = '';
     template = _.template(template.innerHTML);
 
-    var daysByActivity = _.groupBy(allDays, utils.activityClass),
+    var daysByActivity = _.groupBy(allDays, workout.activityClass),
         sortedActivities = _.sortBy(_.keys(daysByActivity), function(activity) {
             return -1 * daysByActivity[activity].length;
         });
@@ -233,7 +233,7 @@ function renderRecords(allDays) {
                         }
                     });
                     records.push({
-                        DESCRIPTION: utils.serializeWorkout(min, true),
+                        DESCRIPTION: workout.serializeWorkout(min, true),
                         DAY: min.DAY,
                     });
                 }
@@ -281,7 +281,7 @@ function renderRecords(allDays) {
 
         list.innerHTML += template({
             ACTIVITY: activity,
-            CLASS: utils.activityClass(activity),
+            CLASS: workout.activityClass(activity),
             RECORDS: records,
         });
     });

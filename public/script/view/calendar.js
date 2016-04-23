@@ -1,11 +1,11 @@
 define([
     "underscore",
     "d3",
-    "./utils",
+    "util/workout",
 ], function(
     _,
     d3,
-    utils,
+    workout,
 undefined) {
 
 // Adapted from http://bl.ocks.org/mbostock/4063318
@@ -80,7 +80,7 @@ var renderCalendar = function(json) {
         });
 
     // Color in days, based on activity
-    rect.attr("class", function(d) { return "day " + utils.activityClass(d); })
+    rect.attr("class", function(d) { return "day " + workout.activityClass(d); })
         .select("title")
         .text(function(d) { return d + ": " + d.ACTIVITY; });
     
@@ -131,7 +131,7 @@ function attachTooltip(selector) {
         var tooltip = document.getElementById("tooltip");
         var description = format(data.DATE);
         if (data.WORKOUTS) {
-            description += "<br>" + _.map(data.WORKOUTS, function(w) { return utils.serializeWorkout(w) }).join("<br>");
+            description += "<br>" + _.map(data.WORKOUTS, function(w) { return workout.serializeWorkout(w) }).join("<br>");
         }
         if (data.NOTES) {
             description += "<br><br>" + data.NOTES;
