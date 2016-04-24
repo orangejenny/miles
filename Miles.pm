@@ -4,8 +4,6 @@ use strict;
 use DBI;
 use YAML;
 
-my $USERNAME = 'jenny';
-
 sub Config {
 	return YAML::LoadFile("../config.yml");
 }
@@ -28,8 +26,8 @@ sub AddDay {
 
     # TODO: transaction for all of this
     my @existing = Miles::Results($dbh, {
-        SQL => "select id from days where day = ? and user = ?",
-        BINDS => [$args->{DAY}, $USERNAME],
+        SQL => "select id from days where day = ?",
+        BINDS => [$args->{DAY}],
         COLUMNS => ['id'],
     });
     if (scalar(@existing)) {
@@ -37,12 +35,12 @@ sub AddDay {
     }
 
     my $sql = qq{
-        insert into days (day, notes, created_at, updated_at, user)
-        values (?, ?, now(), now(), ?)
+        insert into days (day, notes, created_at, updated_at)
+        values (?, ?, now(), now())
     };
     Miles::Results($dbh, {
         SQL => $sql,
-        BINDS => [$args->{DAY}, $args->{NOTES}, $USERNAME],
+        BINDS => [$args->{DAY}, $args->{NOTES}],
         SKIPFETCH => 1,
     });
     my @dayids = Miles::Results($dbh, {
@@ -102,11 +100,10 @@ sub ListDays {
                     extract(year from subdate(now(), interval ? year)), '-',
                     extract(month from subdate(now(), interval ? year)), '-01'
                 )
-                and days.user = ?
             order by
                 days.day desc, days.id
         },
-        BINDS => [$args->{YEARS}, $args->{YEARS}, $USERNAME],
+        BINDS => [$args->{YEARS}, $args->{YEARS}],
         COLUMNS => [qw(id day notes workoutid activity time distance sets reps weight unit)],
     });
     
