@@ -6,10 +6,12 @@
 define([
     "underscore",
     "d3",
+    "util/day",
     "util/workout",
 ], function(
     _,
     d3,
+    day,
     workout,
 undefined) {
     var cellSize = 17,
@@ -131,7 +133,7 @@ undefined) {
         d3.selectAll(selector).on("mouseenter.tooltip", function() {
             var data = d3.select(this).data()[0];
             var tooltip = document.getElementById("tooltip");
-            var description = format(data.DATE);
+            var description = day.formattedDay(format(data.DATE));
             if (data.WORKOUTS) {
                 description += "<br>" + _.map(data.WORKOUTS, function(w) { return workout.serializeWorkout(w) }).join("<br>");
             }
