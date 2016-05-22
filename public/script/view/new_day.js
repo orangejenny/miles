@@ -98,7 +98,12 @@ undefined) {
             index = 0;
         while (index < json.length && _.keys(skeletons).length < 4) {
             var day = json[index];
-            var skeleton = _.map(day.WORKOUTS, function(w) { return workout.serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME'])); }).join("<br>");
+            var skeleton = _.first(_.map(day.WORKOUTS, function(w, i, all) {
+					if (i >= 2 && all.length > 3) {
+						return '...';
+					};
+					return workout.serializeWorkout(_.omit(w, ['SETS', 'REPS', 'TIME']));
+				}), 3).join("<br>");
             if (!skeletons[skeleton]) {
                 skeletons[skeleton] = day.WORKOUTS;
                 var button = document.createElement("button");
