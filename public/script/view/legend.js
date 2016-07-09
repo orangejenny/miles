@@ -3,11 +3,13 @@ define([
     "text!template/record.html",
     "util/pace",
     "util/workout",
+    "view/days",
 ], function(
     _,
     record,
     pace,
     workout,
+    days,
 undefined) {
     var render = function(allDays) {
         var list = document.getElementById("legend"),
@@ -126,6 +128,18 @@ undefined) {
             });
             li.addEventListener("mouseout", function(e) {
                 e.currentTarget.querySelector(".records").style.display = "none";
+            });
+            li.addEventListener("click", function(e) {
+                if (e.currentTarget.querySelector(".activity").classList.contains("selected")) {
+                    days.filter();
+                    e.currentTarget.querySelector(".activity").classList.remove("selected");
+                } else {
+                    _.each(document.querySelectorAll("#legend .activity.selected"), function(li) {
+                        li.classList.remove("selected");
+                    });
+                    days.filter(e.currentTarget.classList[0]);
+                    e.currentTarget.querySelector(".activity").classList.add("selected");
+                }
             });
         });
     };

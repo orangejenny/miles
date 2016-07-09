@@ -1,6 +1,6 @@
-<li>
-    <div class="activity <%= CLASS %>"><%= ACTIVITY %></div>
-    <ul class="records hide <%= CLASS %>">
+<li class="<%= CLASS %>">
+    <div class="activity"><%= ACTIVITY %></div>
+    <ul class="records hide">
         <% _.each(RECORDS, function(r) { %>
             <li>
                 <div class="description"><%= r.DESCRIPTION %></div>

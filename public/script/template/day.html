@@ -1,9 +1,9 @@
-<li>
+<li class="<%= ACTIVITY_CLASS %>">
     <div class="day">
         <%= FORMATTED_DAY %>
     </div>
     <% if (WORKOUTS) { %>
-        <ul class="workouts <%= ACTIVITY_CLASS %>">
+        <ul class="workouts">
             <% _.each(WORKOUTS, function(w) { %>
                 <li><%= w.DESCRIPTION %></li>
             <% }) %>

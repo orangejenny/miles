@@ -16,7 +16,7 @@ undefined) {
             return;
         }
     
-        var activity = _.isString(data) ? data : data.WORKOUTS[0].ACTIVITY;
+        var activity = _.isString(data) ? data : data.WORKOUTS[data.WORKOUTS.length - 1].ACTIVITY;
         if (_.contains(["running", "erging", "crossfit", "sculling", "swimming", "lifting"], activity)) {
             return activity;
         }

@@ -21,7 +21,21 @@ undefined) {
         }
     };
 
+    var filter = function(cssClass) {
+        var list = document.getElementById("days");
+        if (cssClass) {
+            _.each(list.children, function(li) {
+                li.style.display = li.classList.contains(cssClass) ? "block" : "none";
+            });
+        } else {
+            _.each(list.children, function(li) {
+                li.style.display = "block";
+            });
+        }
+    };
+
     return {
         render: render,
+        filter: filter,
     };
 });

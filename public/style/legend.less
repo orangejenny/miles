@@ -24,7 +24,17 @@
 
         .activity {
             width: 100px;
+            cursor: pointer;
         }
+
+        // Color-code activities
+        &.running   { .activity, .records { border-color: @running; }   .activity.selected { background-color: lighten(@running, 50%); } }
+        &.erging    { .activity, .records { border-color: @erging; }    .activity.selected { background-color: lighten(@erging, 20%); } }
+        &.lifting   { .activity, .records { border-color: @lifting; }   .activity.selected { background-color: lighten(@lifting, 50%); } }
+        &.crossfit  { .activity, .records { border-color: @crossfit; }  .activity.selected { background-color: lighten(@crossfit, 20%); } }
+        &.sculling  { .activity, .records { border-color: @sculling; }  .activity.selected { background-color: lighten(@sculling, 20%); } }
+        &.swimming  { .activity, .records { border-color: @swimming; }  .activity.selected { background-color: lighten(@swimming, 50%); } }
+        &.other     { .activity, .records { border-color: @other; }     .activity.selected { background-color: lighten(@other, 20%); } }
 
         .records {
             min-width: 100px;
@@ -44,13 +54,4 @@
             }
         }
     }
-
-    // Color-code activities
-    .running { border-color: @running; }
-    .erging { border-color: @erging; }
-    .lifting { border-color: @lifting; }
-    .crossfit { border-color: @crossfit; }
-    .sculling { border-color: @sculling; }
-    .swimming { border-color: @swimming; }
-    .other { border-color: @other; }
 } 

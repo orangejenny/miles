@@ -62,20 +62,20 @@
             width: calc(~'50% - @{dayWidth}');
             border-left-width: 3px;
             border-left-style: solid;
-
-            // Color-code borders
-            &.running { border-left-color: @running; }
-            &.erging { border-left-color: @erging; }
-            &.lifting { border-left-color: @lifting; }
-            &.crossfit { border-left-color: @crossfit; }
-            &.sculling { border-left-color: @sculling; }
-            &.swimming { border-left-color: @swimming; }
-            &.other { border-left-color: @other; }
         }
 
         .notes {
             float: left;
             width: 50%;
         }
+
+        // Color-code borders
+        &.running .workouts { border-left-color: @running; }
+        &.erging .workouts { border-left-color: @erging; }
+        &.lifting .workouts { border-left-color: @lifting; }
+        &.crossfit .workouts { border-left-color: @crossfit; }
+        &.sculling .workouts { border-left-color: @sculling; }
+        &.swimming .workouts { border-left-color: @swimming; }
+        &.other .workouts { border-left-color: @other; }
     }
 }
