@@ -21,21 +21,37 @@ undefined) {
         }
     };
 
-    var filter = function(cssClass) {
+    var showAll = function() {
+        var list = document.getElementById("days");
+        _.each(list.children, function(li) {
+            li.style.display = "block";
+        });
+    }
+
+    var filterByClass = function(cssClass) {
         var list = document.getElementById("days");
         if (cssClass) {
-            _.each(list.children, function(li) {
+            _.each(document.getElementById("days").children, function(li) {
                 li.style.display = li.classList.contains(cssClass) ? "block" : "none";
             });
         } else {
-            _.each(list.children, function(li) {
-                li.style.display = "block";
+            showAll();
+        }
+    };
+
+    var filterByText = function(text) {
+        if (text) {
+            _.each(document.getElementById("days").children, function(li) {
+                li.style.display = (li.querySelector(".workouts").innerHTML + li.querySelector(".notes").innerHTML).indexOf(text) == -1 ? "none" : "block";
             });
+        } else {
+            showAll();
         }
     };
 
     return {
         render: render,
-        filter: filter,
+        filterByClass: filterByClass,
+        filterByText: filterByText,
     };
 });

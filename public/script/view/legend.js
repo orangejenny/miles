@@ -121,7 +121,7 @@ undefined) {
             });
         });
     
-        // Add hover events to toggle record lists
+        // Add hover events to toggle record lists, click to filter by activity
         _.each(document.querySelectorAll("#legend > li"), function(li) {
             li.addEventListener("mouseover", function(e) {
                 e.currentTarget.querySelector(".records").style.display = "block";
@@ -131,13 +131,13 @@ undefined) {
             });
             li.addEventListener("click", function(e) {
                 if (e.currentTarget.querySelector(".activity").classList.contains("selected")) {
-                    days.filter();
+                    days.filterByClass();
                     e.currentTarget.querySelector(".activity").classList.remove("selected");
                 } else {
                     _.each(document.querySelectorAll("#legend .activity.selected"), function(li) {
                         li.classList.remove("selected");
                     });
-                    days.filter(e.currentTarget.classList[0]);
+                    days.filterByClass(e.currentTarget.classList[0]);
                     e.currentTarget.querySelector(".activity").classList.add("selected");
                 }
             });

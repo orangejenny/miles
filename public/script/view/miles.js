@@ -22,9 +22,9 @@ undefined) {
     var today = new Date();
     generatePage(new Date(today.getFullYear() - 1, today.getMonth(), 1));
 
-    // Attach listener for filtering amount of data displayed
-    var filterYears = document.getElementById("filter-years");
-    _.each(filterYears.querySelectorAll("li:not(.disabled)"), function(li) {
+    // Attach listeners for filtering data
+    var filters = document.getElementById("filters");
+    _.each(filters.querySelectorAll(".years li:not(.disabled)"), function(li) {
         li.addEventListener("click", function(e) {
             var year = e.currentTarget.innerHTML.replace(/\D/g, '');
             var next = e.currentTarget;
@@ -35,6 +35,10 @@ undefined) {
             } while (next = next.nextSibling);
             generatePage(new Date(year, 0, 1));
         });
+    });
+
+    filters.querySelector("input").addEventListener("keyup", function(e) {
+        days.filterByText(e.currentTarget.value);
     });
 
     function generatePage(minDate) {

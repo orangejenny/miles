@@ -96,26 +96,38 @@ ul {
     }
 }
 
-#filter-years {
+#filters {
     position: fixed;
     top: @newDayHeight;
+    width: calc(~'100% - ' @spacingNormal * 2);
 
-    li {
-        display: inline-block;
-        margin-right: @spacingWide;
-        cursor: pointer;
+    .years {
+        width: 50%;
+        text-align: right;
+        float: left;
+        margin-top: 4px;
 
-        &:hover:not(.disabled) {
-            font-weight: bold;
+        li {
+            display: inline-block;
+            margin-right: @spacingWide;
+            cursor: pointer;
+
+            &:hover:not(.disabled) {
+                font-weight: bold;
+            }
+
+            &:not(.disabled)::before {
+                content: "< ";
+            }
+
+            &.disabled {
+                cursor: auto;
+                color: @muted;
+            }
         }
+    }
 
-        &:not(.disabled)::before {
-            content: "< ";
-        }
-
-        &.disabled {
-            cursor: auto;
-            color: @muted;
-        }
+    input {
+        float: left;
     }
 }

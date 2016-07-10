@@ -88,10 +88,13 @@ printf(qq{
                         <div class="add-day"></div>
                     </fieldset>
                 </form>
-                <ul id="filter-years">
-                    %s
-                    <li class="disabled">%s</li>
-                </ul>
+                <div id="filters">
+                    <ul class="years">
+                        %s
+                        <li class="disabled">%s</li>
+                    </ul>
+                    <input type="text" />
+                </div>
                 <div id="calendar"></div>
                 <ul id="legend"></ul>
                 <ul id="days"></ul>
