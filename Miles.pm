@@ -78,14 +78,12 @@ sub AddDay {
 # Description: Fetch a range of days, along with their workouts
 #
 # Parameters:
-#   YEARS: Number of years back to go (defaults to 1)
+#   MIN: Minimum date, as a YYYY-MM-DD string
 #
 # Return Value: Array or arrayref of hashrefs
 ################################################################
 sub ListDays {
     my ($dbh, $args) = @_;
-
-    $args->{YEARS} ||= 1;
 
     my @rows = Miles::Results($dbh, {
         SQL => qq{
@@ -96,14 +94,11 @@ sub ListDays {
                 days, workouts
             where
                 days.id = workouts.day_id
-                and days.day > concat(
-                    extract(year from subdate(now(), interval ? year)), '-',
-                    extract(month from subdate(now(), interval ? year)), '-01'
-                )
+                and days.day > ?
             order by
                 days.day desc, days.id
         },
-        BINDS => [$args->{YEARS}, $args->{YEARS}],
+        BINDS => [$args->{MIN}],
         COLUMNS => [qw(id day notes workoutid activity time distance sets reps weight unit)],
     });
     
@@ -138,6 +133,28 @@ sub ListDays {
     }
 
     return wantarray ? @days : \@days;
+}
+
+################################################################
+# DayRange
+#
+# Description: Fetch minimum and maximum days.
+#
+# Parameters: None
+#
+# Return Value: Hashref with MIN and MAX as YYYY-MM-DD strings.
+################################################################
+sub DayRange {
+    my ($dbh) = @_;
+
+    my @rows = Miles::Results($dbh, {
+        SQL => qq{
+            select min(day), max(day) from days
+        },
+        COLUMNS => [qw(min max)],
+    });
+
+    return $rows[0];
 }
 
 ################################################################
