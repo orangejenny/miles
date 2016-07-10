@@ -80,10 +80,11 @@ printf(qq{
                     </fieldset>
                 </form>
                 <ul id="filter-years">
-                    <li>&lt; 2012</li>
-                    <li>&lt; 2013</li>
-                    <li>&lt; 2014</li>
-                    <li>&lt; 2015</li>
+                    <li>2012</li>
+                    <li>2013</li>
+                    <li>2014</li>
+                    <li>2015</li>
+                    <li class="disabled">2016</li>
                 </ul>
                 <div id="calendar"></div>
                 <ul id="legend"></ul>

@@ -24,15 +24,20 @@ undefined) {
 
     // Attach listener for filtering amount of data displayed
     var filterYears = document.getElementById("filter-years");
-    _.each(filterYears.querySelectorAll("li"), function(li) {
+    _.each(filterYears.querySelectorAll("li:not(.disabled)"), function(li) {
         li.addEventListener("click", function(e) {
             var year = e.currentTarget.innerHTML.replace(/\D/g, '');
+            var next = e.currentTarget;
+            do {
+                if (next.nodeName.toLowerCase() === "li") {
+                    next.classList.add("disabled");
+                }
+            } while (next = next.nextSibling);
             generatePage(new Date(year, 0, 1));
         });
     });
 
     function generatePage(minDate) {
-        console.log(minDate.toISOString().replace(/T.*/, ''));
         d3.json("data.pl?min=" + minDate.toISOString().replace(/T.*/, ''), function(error, json) {
             if (error) {
                 throw error;

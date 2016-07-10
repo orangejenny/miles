@@ -76,7 +76,25 @@ ul {
 }
 
 #filter-years {
+    position: fixed;
+    top: @newDayHeight;
+
     li {
         display: inline-block;
+        margin-right: @spacingWide;
+        cursor: pointer;
+
+        &:hover:not(.disabled) {
+            font-weight: bold;
+        }
+
+        &:not(.disabled)::before {
+            content: "< ";
+        }
+
+        &.disabled {
+            cursor: auto;
+            color: @muted;
+        }
     }
 }
