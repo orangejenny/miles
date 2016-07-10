@@ -47,6 +47,10 @@ $day = $fdat->{DAY} || $day;
 $month = $fdat->{MONTH} || $month + 1;
 $year = $fdat->{YEAR} || $year + 1900;
 
+# Date range
+my $range = Miles::DayRange($dbh);
+my $minyear = $range->{MIN};
+$minyear =~ s/\D.*//;
 
 printf(qq{
         <html>
@@ -80,11 +84,8 @@ printf(qq{
                     </fieldset>
                 </form>
                 <ul id="filter-years">
-                    <li>2012</li>
-                    <li>2013</li>
-                    <li>2014</li>
-                    <li>2015</li>
-                    <li class="disabled">2016</li>
+                    %s
+                    <li class="disabled">%s</li>
                 </ul>
                 <div id="calendar"></div>
                 <ul id="legend"></ul>
@@ -99,4 +100,6 @@ printf(qq{
     $error ? "<div id='error'>$error</div>" : "",
     $error ? "hide" : "",
     $month, $day, $year,
+    join("", map { "<li>$_</li>" } $minyear .. $year - 1),
+    $year,
 );

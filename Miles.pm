@@ -136,6 +136,28 @@ sub ListDays {
 }
 
 ################################################################
+# DayRange
+#
+# Description: Fetch minimum and maximum days.
+#
+# Parameters: None
+#
+# Return Value: Hashref with MIN and MAX as YYYY-MM-DD strings.
+################################################################
+sub DayRange {
+    my ($dbh) = @_;
+
+    my @rows = Miles::Results($dbh, {
+        SQL => qq{
+            select min(day), max(day) from days
+        },
+        COLUMNS => [qw(min max)],
+    });
+
+    return $rows[0];
+}
+
+################################################################
 # DBH
 #
 # Description: Create database handle
