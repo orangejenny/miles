@@ -38,6 +38,7 @@ undefined) {
     });
 
     function generatePage(minDate) {
+        document.getElementById("spinner").style.display = "block";
         d3.json("data.pl?min=" + minDate.toISOString().replace(/T.*/, ''), function(error, json) {
             if (error) {
                 throw error;
@@ -57,6 +58,7 @@ undefined) {
             days.render(json);
             legend.render(json);
             calendar.render(json);
+            document.getElementById("spinner").style.display = "none";
         });
     }
 });

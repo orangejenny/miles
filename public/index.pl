@@ -61,6 +61,11 @@ printf(qq{
         	</head>
         	<body>
                 <div id="modal-backdrop" class="%s"></div>
+                <div id="spinner" class="hide">
+                    <div>
+                        <img src="images/spinner.gif" />
+                    </div>
+                </div>
                 %s
                 <form id="new-day" method="POST" class="%s">
                     <fieldset>

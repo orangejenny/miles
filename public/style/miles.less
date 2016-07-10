@@ -50,7 +50,7 @@ ul {
     padding: 0;
 }
 
-#modal-backdrop {
+#modal-backdrop, #spinner {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -58,6 +58,9 @@ ul {
     right: 0;
     background-color: black;
     opacity: 0.5;
+}
+
+#modal-backdrop {
     z-index: @zIndexModalBackdrop;
 }
 
@@ -73,6 +76,24 @@ ul {
     left: @spacingWide;
     right: @spacingWide;
     z-index: @zIndexModal;
+}
+
+#spinner {
+    z-index: @zIndexSpinner;
+
+    > div {
+        @size: 32px;
+        @padding: 4px;
+        position: absolute;
+        top: calc(~'50% - ' @size / 2 + @padding);
+        left: calc(~'50% - ' @size / 2 + @padding);
+        background-color: white;
+        opacity: 1;
+        padding: @padding;
+        width: @size + @padding * 2;
+        height: @size + @padding * 2;
+        border-radius: @borderRadius;
+    }
 }
 
 #filter-years {
