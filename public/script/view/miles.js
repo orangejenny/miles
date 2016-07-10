@@ -19,26 +19,21 @@ requirejs([
     workout,
 undefined) {
     // Render initial page: display past year
-    generatePage(1);
+    var today = new Date();
+    generatePage(new Date(today.getFullYear() - 1, today.getMonth(), 1));
 
     // Attach listener for filtering amount of data displayed
-    var filterForm = document.getElementById("filter-years");
-    filterForm.querySelector("button").addEventListener("click", function() {
-        var input = filterForm.querySelector("input"),
-            years = parseInt(input.value);
-        if (!_.isNumber(years) || years <= 0) {
-            years = 1;
-            input.value = years;
-        }
-        generatePage(years);
+    var filterYears = document.getElementById("filter-years");
+    _.each(filterYears.querySelectorAll("li"), function(li) {
+        li.addEventListener("click", function(e) {
+            var year = e.currentTarget.innerHTML.replace(/\D/g, '');
+            generatePage(new Date(year, 0, 1));
+        });
     });
 
-    function generatePage(years) {
-        var filterForm = document.getElementById("filter-years"),
-            filterSpinner = document.getElementById("filter-spinner");
-        filterForm.style.display = "none";
-        filterSpinner.style.display = "block";
-        d3.json("data.pl?years=" + years, function(error, json) {
+    function generatePage(minDate) {
+        console.log(minDate.toISOString().replace(/T.*/, ''));
+        d3.json("data.pl?min=" + minDate.toISOString().replace(/T.*/, ''), function(error, json) {
             if (error) {
                 throw error;
             }
@@ -57,9 +52,6 @@ undefined) {
             days.render(json);
             legend.render(json);
             calendar.render(json);
-    
-            filterForm.style.display = "block";
-            filterSpinner.style.display = "none";
         });
     }
 });

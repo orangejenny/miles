@@ -47,7 +47,6 @@ $day = $fdat->{DAY} || $day;
 $month = $fdat->{MONTH} || $month + 1;
 $year = $fdat->{YEAR} || $year + 1900;
 
-my $years = $fdat->{YEARS} || 1;
 
 printf(qq{
         <html>
@@ -59,13 +58,6 @@ printf(qq{
         	<body>
                 <div id="modal-backdrop" class="%s"></div>
                 %s
-                <div id="filter-years">
-                    <input type="text" value="%s" size="1" maxlength="2" />
-                    <button>years</button>
-                </div>
-                <div id="filter-spinner" class="hide">
-                    <img src="images/spinner.gif" />
-                </div>
                 <form id="new-day" method="POST" class="%s">
                     <fieldset>
                         <legend>
@@ -87,6 +79,12 @@ printf(qq{
                         <div class="add-day"></div>
                     </fieldset>
                 </form>
+                <ul id="filter-years">
+                    <li>&lt; 2012</li>
+                    <li>&lt; 2013</li>
+                    <li>&lt; 2014</li>
+                    <li>&lt; 2015</li>
+                </ul>
                 <div id="calendar"></div>
                 <ul id="legend"></ul>
                 <ul id="days"></ul>
@@ -98,7 +96,6 @@ printf(qq{
     },
     $error ? "" : "hide",
     $error ? "<div id='error'>$error</div>" : "",
-    $years,
     $error ? "hide" : "",
     $month, $day, $year,
 );
