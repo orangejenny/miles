@@ -41,13 +41,17 @@ undefined) {
 
     var filterByText = function(text) {
         if (text) {
-            text = text.toLowerCase();
+            var tokens = text.toLowerCase().trim().split(/\s+/);
             _.each(document.getElementById("days").children, function(li) {
-                if (li.querySelector(".workouts").innerHTML.toLowerCase().indexOf(text) != -1
-                    || li.querySelector(".notes").innerHTML.toLowerCase().indexOf(text) != -1) {
-                    li.style.display = "block";
-                } else {
+                var display = true,
+                    haystack = li.querySelector(".workouts").innerHTML + li.querySelector(".notes").innerHTML;
+                haystack = haystack.toLowerCase();
+                if (_.find(tokens, function(token) {
+                    return haystack.indexOf(token) === -1;
+                })) {
                     li.style.display = "none";
+                } else {
+                    li.style.display = "block";
                 }
             });
         } else {
