@@ -41,8 +41,14 @@ undefined) {
 
     var filterByText = function(text) {
         if (text) {
+            text = text.toLowerCase();
             _.each(document.getElementById("days").children, function(li) {
-                li.style.display = (li.querySelector(".workouts").innerHTML + li.querySelector(".notes").innerHTML).indexOf(text) == -1 ? "none" : "block";
+                if (li.querySelector(".workouts").innerHTML.toLowerCase().indexOf(text) != -1
+                    || li.querySelector(".notes").innerHTML.toLowerCase().indexOf(text) != -1) {
+                    li.style.display = "block";
+                } else {
+                    li.style.display = "none";
+                }
             });
         } else {
             showAll();
