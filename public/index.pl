@@ -17,10 +17,13 @@ my $error = "";
 if ($fdat->{NEW} == 1) {
     my $day = sprintf("%s-%s-%s", $fdat->{YEAR}, $fdat->{MONTH}, $fdat->{DAY});
     my @workouts = ();
-    while ($fdat->{"ACTIVITY" . scalar(@workouts)}) {
+    while (exists $fdat->{"ACTIVITY" . scalar(@workouts)}) {
         my $workout = {};
         foreach my $param (qw(ACTIVITY SETS REPS WEIGHT DISTANCE UNIT TIME)) {
             $workout->{$param} = $fdat->{$param . scalar(@workouts)};
+        }
+        if (!$workout->{ACTIVITY}) {
+            $workout->{ACTIVITY} = $fdat->{"OTHER" . scalar(@workouts)};
         }
         if ($workout->{TIME}) {
             my $time = 0;

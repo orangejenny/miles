@@ -1,11 +1,17 @@
 <div class="workout-row">
     <button type="button" class="pull-right remove-workout">Remove workout</button>
     <div class="pull-left">
-        <select class="new-activity" name="activity<%= index %>">
-            <% _.each(activities, function(a) { %>
-                <option><%= a %></option>
-            <% }) %>
-        </select>
+        <div class="input-row">
+            <select class="new-activity" name="activity<%= index %>">
+                <% _.each(activities, function(a) { %>
+                    <option><%= a %></option>
+                <% }) %>
+                <option value="">other...</option>
+            </select>
+        </div>
+        <div class="input-row">
+            <input type="text" name="other<%= index %>" class="other-activity hide" />
+        </div>
     </div>
     <div class="pull-left">
         <div class="input-row">

@@ -40,6 +40,16 @@ undefined) {
             var workout = dom.closest(this, function(e) { return e.classList.contains("workout-row"); });
             workout.parentElement.removeChild(workout);
         });
+
+        var otherActivity = div.querySelector(".other-activity");
+        div.querySelector(".new-activity").addEventListener("change", function(e) {
+            if (e.target.value) {
+                otherActivity.classList.add("hide");
+            } else {
+                otherActivity.classList.remove("hide");
+                otherActivity.focus();
+            }
+        });
     
         return div;
     };
