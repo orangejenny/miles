@@ -59,6 +59,7 @@ undefined) {
         document.querySelector(".add-day").style.display = "block";
         document.querySelector(".not-legend").style.display = "none";
         document.querySelector("#modal-backdrop").style.display = "none";
+        document.getElementById("modal-backdrop").removeEventListener("click", cancelDay);
         document.querySelector("#new-day .workouts").innerHTML = "";
     };
 
@@ -101,6 +102,7 @@ undefined) {
             document.querySelector(".add-day").style.display = "none";
             document.querySelector(".not-legend").style.display = "block";
             document.querySelector("#modal-backdrop").style.display = "block";
+            document.getElementById("modal-backdrop").addEventListener("click", cancelDay);
         });
         buttonBar.innerHTML = '';
         buttonBar.appendChild(blankButton);
