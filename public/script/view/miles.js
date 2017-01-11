@@ -48,9 +48,6 @@ undefined) {
                 throw error;
             }
     
-            // TODO: make new_day.render accept post-processed json instead of pre-processed?
-            new_day.render(json);
-    
             json = _.map(json, function(day) {
                 day.ACTIVITY_CLASS = workout.activityClass(day);
                 day.WORKOUTS = _.map(day.WORKOUTS, function(w) {
@@ -59,6 +56,7 @@ undefined) {
                 });
                 return day;
             });
+            new_day.render(json);
             days.render(json);
             legend.render(json);
             calendar.render(json);

@@ -14,12 +14,16 @@ define([
     pace,
     workout,
 undefined) {
-    var addBlankWorkout = function() {
+    var addBlankWorkout = function(activities) {
         var index = document.querySelectorAll("#new-day .workouts .workout-row").length,
             workoutTemplate = _.template(new_workout),
             div = document.createElement("div");
 
-        div.innerHTML = workoutTemplate({ index: index });
+        div.innerHTML = workoutTemplate({
+            activities: activities,
+            index: index,
+        });
+
         // TODO: deal with this. note that this will not add any text nodes
         _.each(div.children, function(child) {
             document.querySelector("#new-day .workouts").appendChild(child);
@@ -40,8 +44,10 @@ undefined) {
         return div;
     };
 
-    var attachListeners = function() {
-        document.getElementById("add-workout").addEventListener("click", addBlankWorkout);
+    var attachListeners = function(activities) {
+        document.getElementById("add-workout").addEventListener("click", function() {
+            addBlankWorkout(activities);
+        });
         updateDayOfWeek();
         _.each(document.querySelectorAll("#new-day legend input"), function(i) {
             i.addEventListener("blur", updateDayOfWeek);
@@ -82,11 +88,16 @@ undefined) {
 
     var render = function(json) {
         var buttonBar = document.querySelector(".add-day"),
-            blankButton = document.createElement("button");
+            blankButton = document.createElement("button")
+            allActivities = _.pluck(_.flatten(_.pluck(json, 'WORKOUTS')), 'ACTIVITY'),
+            topActivities = _.first(_.map(_.sortBy(_.pairs(_.countBy(allActivities)), function(a) { return -a[1]; }), function(a) { return a[0]; }), 4),
+            otherActivities = _.difference(_.sortBy(_.uniq(allActivities)), topActivities),
+            activities = topActivities.concat(otherActivities);
+
         blankButton.type = "button";
         blankButton.innerHTML = "Blank Day";
         blankButton.addEventListener("click", function() {
-            addBlankWorkout();
+            addBlankWorkout(activities);
             document.querySelector(".add-day").style.display = "none";
             document.querySelector(".not-legend").style.display = "block";
             document.querySelector("#modal-backdrop").style.display = "block";
@@ -114,7 +125,7 @@ undefined) {
                     var workouts = this.getAttribute("data-workouts");
                     workouts = JSON.parse(workouts);
                     _.each(workouts, function(workout, index) {
-                        var workoutDiv = addBlankWorkout();
+                        var workoutDiv = addBlankWorkout(activities);
                         _.each(['activity', 'unit', 'sets', 'reps', 'weight', 'distance'], function(name) {
                             if (workout[name.toUpperCase()]) {
                                 workoutDiv.querySelector("[name^='" + name + "']").value = workout[name.toUpperCase()] || "";
@@ -130,7 +141,7 @@ undefined) {
             index++;
         }
 
-        attachListeners();
+        attachListeners(activities);
     };
 
     return {

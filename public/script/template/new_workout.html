@@ -2,17 +2,9 @@
     <button type="button" class="pull-right remove-workout">Remove workout</button>
     <div class="pull-left">
         <select class="new-activity" name="activity<%= index %>">
-            <option>running</option>
-            <option>bench press</option>
-            <option>chinups</option>
-            <option>cleans</option>
-            <option>crossfit</option>
-            <option>curls</option>
-            <option>deadlifts</option>
-            <option>erging</option>
-            <option>overhead press</option>
-            <option>squats</option>
-            <option>circuits</option>
+            <% _.each(activities, function(a) { %>
+                <option><%= a %></option>
+            <% }) %>
         </select>
     </div>
     <div class="pull-left">
