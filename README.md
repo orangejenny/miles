@@ -1,3 +1,5 @@
+This repository has been superseded by [Kilo](https://github.com/orangejenny/dj-orange/#kilo).
+
 # Miles
 
 Revamped [my old workout-tracking application](https://github.com/orangejenny/workouts) with D3, largely-vanilla JavaScript, and a little bit of Perl.
